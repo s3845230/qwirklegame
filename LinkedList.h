@@ -9,22 +9,22 @@ template <typename T>
 class LinkedList {
 public:
 
-   LinkedList();
+   LinkedList(T type);
    ~LinkedList();
 
    int size();
    void clear();
 
-   void addFront(Node<T>* node);
-   void addBack(Node<T>* node);
+   void addFront(Node<type>* node);
+   void addBack(Node<type>* node);
 
-   Node<T>* getNode(int i);
+   Node<type>* getNode(int i);
    void delNode(int i);
 
 private:
+   T type;
+   Node<type>* head;
 
-   Node<T>* head;
-   
 };
 
 #endif // ASSIGN2_LINKEDLIST_H

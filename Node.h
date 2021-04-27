@@ -8,6 +8,7 @@ class Node {
 public:
 
    Node(T* type, Node* next);
+   ~Node();
    Node(Node& other);
 
    T* type;
