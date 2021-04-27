@@ -7,9 +7,7 @@
 
 int main(void)
 {
-   Prompt *prompt = new Prompt();
 
-   prompt->welcomeMessage();
    // LinkedList *list = new LinkedList();
    // delete list;
 
