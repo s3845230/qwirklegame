@@ -1,6 +1,5 @@
 
 #include "LinkedList.h"
-#include "Prompt.h"
 #include <iostream>
 
 #define EXIT_SUCCESS 0
