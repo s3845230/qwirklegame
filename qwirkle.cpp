@@ -10,6 +10,7 @@ int main(void) {
    delete list;
 
    std::cout << "TODO: Implement Qwirkle!" << std::endl;
+   
 
    return EXIT_SUCCESS;
 }
