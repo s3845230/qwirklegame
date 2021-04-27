@@ -5,11 +5,32 @@
 
 #define EXIT_SUCCESS    0
 
-int main(void) {
-   LinkedList* list = new LinkedList();
-   delete list;
+void welcomeMessage();
+void showMenu();
 
-   std::cout << "TODO: Implement Qwirkle!" << std::endl;
+int main(void) {
+
+   welcomeMessage();
+   showMenu();
 
    return EXIT_SUCCESS;
+}
+
+void welcomeMessage()
+{
+   std::cout << std::endl;
+   std::cout << "Welcome to Qwirkle!" << std::endl;
+   std::cout << "-------------------" << std::endl;
+}
+
+void showMenu()
+{
+   std::cout << std::endl;
+   std::cout << "Menu" << std::endl;
+   std::cout << "----" << std::endl;
+   std::cout << "1. New Game" << std::endl;
+   std::cout << "2. Load Game" << std::endl;
+   std::cout << "3. Credits (Show student information)" << std::endl;
+   std::cout << "4. Quit" << std::endl;
+   std::cout << std::endl;
 }
