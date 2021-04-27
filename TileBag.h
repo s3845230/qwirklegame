@@ -14,7 +14,8 @@ class TileBag {
 
     private:
 
-        LinkedList<Tile>* tiles;
+        Tile* top;
+        LinkedList tiles;
 };
 
 #endif // ASSIGN2_TILEBAG_H

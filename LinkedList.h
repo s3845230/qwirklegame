@@ -4,26 +4,24 @@
 
 #include "Node.h"
 
-template <typename T>
-
 class LinkedList {
 public:
 
-   LinkedList(T type);
+   LinkedList();
    ~LinkedList();
 
    int size();
    void clear();
 
-   void addFront(Node<type>* node);
-   void addBack(Node<type>* node);
+   void addFront(Node* node);
+   void addBack(Node* node);
 
-   Node<type>* getNode(int i);
+   Node* getNode(int i);
    void delNode(int i);
 
 private:
-   T type;
-   Node<type>* head;
+
+   Node* head;
 
 };
 
