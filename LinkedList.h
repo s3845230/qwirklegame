@@ -19,6 +19,9 @@ public:
    Node* getNode(int i);
    void delNode(int i);
 
+   // returns and deletes the last node on the LinkedList
+   Node* popNode();
+
 private:
 
    Node* head;
