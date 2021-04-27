@@ -5,8 +5,12 @@
 
 #define EXIT_SUCCESS 0
 void getInput(std::string &input);
+void makeSelection(std::string);
 int main(void)
 {
+   std::string input;
+   getInput(input);
+   makeSelection(input);
 
    // LinkedList *list = new LinkedList();
    // delete list;
@@ -19,4 +23,25 @@ void getInput(std::string &input)
 {
    std::cout << "> ";
    std::getline(std::cin, input);
+}
+
+void makeSelection(std::string input)
+{
+   if (input.compare("1") == 0)
+   {
+      std::cout << "1 selected" << std::endl;
+   }
+   else if (input.compare("2") == 0)
+   {
+      std::cout << "2 selected" << std::endl;
+   }
+   else if (input.compare("3") == 0)
+   {
+      std::cout << "3 selected" << std::endl;
+   }
+   else if (input.compare("4") == 0)
+   {
+
+      std::cout << "4 selected" << std::endl;
+   }
 }
