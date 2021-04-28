@@ -31,16 +31,17 @@ void LinkedList::clear() {
       Node* previous = current;
       while (current->next != nullptr) {
          current = current->next;
-         std::cout << "clearing: " << previous->tile << std::endl;
          delete previous;
          previous = current;
       }
-      std::cout << "fclearing: " << current->tile << std::endl;
       delete current;
       head->next = nullptr;
    }
 }
 Tile* LinkedList::getNode(int i) {
+   if (i < 0) {
+      throw std::invalid_argument("out of range integer given to LinkedList");
+   }
    int count = -1;
    Node* search = head;
    while (search != nullptr) {
