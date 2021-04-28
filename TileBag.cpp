@@ -34,6 +34,7 @@ void TileBag::shuffle() {
     for (int i = 0; i < this->tiles->size(); i++) {
         int randomIndex = rand() % this->tiles->size() + 1;
         shuffleBag->addBack(this->tiles->getNode(randomIndex));
+        this->tiles->delNode(randomIndex);
     }
 
     // empty TileBag.tiles
