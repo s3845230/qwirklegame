@@ -1,4 +1,3 @@
-
 #ifndef ASSIGN2_LINKEDLIST_H
 #define ASSIGN2_LINKEDLIST_H
 
@@ -13,14 +12,14 @@ public:
    int size();
    void clear();
 
-   void addFront(Node* node);
-   void addBack(Node* node);
+   void addFront(Tile* tile);
+   void addBack(Tile* tile);
 
-   Node* getNode(int i);
+   Tile* getNode(int i);
    void delNode(int i);
 
    // returns and deletes the last node on the LinkedList
-   Node* popNode();
+   Tile* popNode();
 
 private:
 

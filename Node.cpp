@@ -1,4 +1,3 @@
-
 #include "Node.h"
 #include "Tile.h"
 
@@ -9,10 +8,10 @@ Node::Node(Tile* tile, Node* next)
 }
 
 Node::~Node() {
-   
+   delete tile;
 }
 
-Node::Node(Node& other)
-{
-   // TODO
-}
+Node::Node(Node& other) :
+    tile(other.tile),
+    next(other.next)
+{}

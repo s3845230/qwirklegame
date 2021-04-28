@@ -1,4 +1,3 @@
-
 #ifndef ASSIGN2_TILE_H
 #define ASSIGN2_TILE_H
 
@@ -13,6 +12,7 @@ public:
 
    Tile(Colour colour, Shape shape);
    ~Tile();
+   Tile(Tile& other);
 
    Colour colour;
    Shape  shape;
