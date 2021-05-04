@@ -1,29 +1,35 @@
 
 #include "LinkedList.h"
 #include <iostream>
-
+#include "Game.h"
 #include "TileBag.h"
 
 #define EXIT_SUCCESS 0
 void welcomeMessage();
 void showMenu();
 void getInput(std::string &input);
-void makeSelection(std::string);
+void makeSelection(std::string, Game *&game, bool &gameRunning);
 int main(void)
 {
-   // std::string input;
-   // welcomeMessage();
-   // showMenu();
-   // getInput(input);
-   // makeSelection(input);
+   Game *game = new Game();
+   bool gameRunning = true;
+   welcomeMessage();
+   while (gameRunning)
+   {
+      showMenu();
+      std::string input;
+      getInput(input);
+      makeSelection(input, game, gameRunning);
 
-   // LinkedList *list = new LinkedList();
-   // delete list;
-
-   // std::cout << "TODO: Implement Qwirkle!" << std::endl;
-
-   TileBag* tilebag = new TileBag();
-   std::cout << tilebag << std::endl;
+      while (game->isBeingPlayed())
+      {
+         // Show game state
+         getInput(input);
+         makeSelection(input, game, gameRunning);
+         // continue game play
+      }
+   }
+   delete game;
 
    return EXIT_SUCCESS;
 }
@@ -51,7 +57,7 @@ void getInput(std::string &input)
    std::getline(std::cin, input);
 }
 
-void makeSelection(std::string input)
+void makeSelection(std::string input, Game *&game, bool &gameRunning)
 {
    if (input.compare("1") == 0)
    {

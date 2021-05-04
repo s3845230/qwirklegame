@@ -15,6 +15,7 @@ class Board {
         Tile* getTile(int row, int col);
 
         std::vector<std::vector<Tile*>> getState();
+        
 
     private:
         std::vector<std::vector<Tile*>> state;
