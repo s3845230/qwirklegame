@@ -23,7 +23,7 @@ int main(void)
 
       while (game->isBeingPlayed())
       {
-         // Show game state
+         game->showGameState();
          getInput(input);
          makeSelection(input, game, gameRunning);
          // continue game play

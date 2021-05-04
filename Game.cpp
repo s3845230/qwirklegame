@@ -91,6 +91,17 @@ bool Game::isBeingPlayed()
 void Game::showGameState()
 {
     // TODO
+    std::cout << this->getPlayer(this->getCurrentPlayer())->getName() << ", it's your turn" << std::endl;
+    for (int i = 0; i < this->getPlayerCount(); i++)
+    {
+        std::cout << "Score for " << this->getPlayer(i)->getName() << ": " << this->getPlayer(i)->getScore() << std::endl;
+    }
+
+    this->board->showBoard();
+
+    std::cout << std::endl;
+    std::cout << "Your hand is" << std::endl;
+    this->getPlayer(this->getCurrentPlayer())->showHand();
 }
 
 void Game::addTilesToBag()
