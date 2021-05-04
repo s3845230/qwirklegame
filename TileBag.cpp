@@ -42,7 +42,7 @@ void TileBag::shuffle() {
     // make TileBag.tiles equal to shuffleBag
     this->tiles = shuffleBag;
     
-    // free memory used for shuffleBag;
+    // free memory used for shuffleBag
     delete shuffleBag;
 }
 

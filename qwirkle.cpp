@@ -2,6 +2,8 @@
 #include "LinkedList.h"
 #include <iostream>
 
+#include "TileBag.h"
+
 #define EXIT_SUCCESS 0
 void welcomeMessage();
 void showMenu();
@@ -9,16 +11,19 @@ void getInput(std::string &input);
 void makeSelection(std::string);
 int main(void)
 {
-   std::string input;
-   welcomeMessage();
-   showMenu();
-   getInput(input);
-   makeSelection(input);
+   // std::string input;
+   // welcomeMessage();
+   // showMenu();
+   // getInput(input);
+   // makeSelection(input);
 
    // LinkedList *list = new LinkedList();
    // delete list;
 
    // std::cout << "TODO: Implement Qwirkle!" << std::endl;
+
+   TileBag* tilebag = new TileBag();
+   std::cout << tilebag << std::endl;
 
    return EXIT_SUCCESS;
 }
