@@ -7,7 +7,7 @@
 
 Game::Game()
 {
-    this->bag = new LinkedList();
+    this->bag = new TileBag();
     this->currentPlayer = 0;
     this->playerCount = 0;
 }
@@ -30,7 +30,7 @@ Player *Game::getPlayer(unsigned int playernum)
 {
     return this->players[playernum];
 }
-LinkedList *Game::getBag()
+TileBag *Game::getBag()
 {
     return this->bag;
 }
@@ -90,7 +90,6 @@ bool Game::isBeingPlayed()
 }
 void Game::showGameState()
 {
-    // TODO
     std::cout << this->getPlayer(this->getCurrentPlayer())->getName() << ", it's your turn" << std::endl;
     for (int i = 0; i < this->getPlayerCount(); i++)
     {
@@ -107,6 +106,7 @@ void Game::showGameState()
 void Game::addTilesToBag()
 {
     // TODO
+    this->bag->shuffle();
 }
 
 void Game::distributeTilesToPlayers()
@@ -152,6 +152,7 @@ void Game::startGame()
 {
     this->setBeingPlayed(true);
     this->board = new Board();
+
     this->addTilesToBag();
     this->distributeTilesToPlayers();
 }

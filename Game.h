@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "LinkedList.h"
 #include "Board.h"
+#include "TileBag.h"
 #include <vector>
 
 #define MAX_NUM_OF_PLAYERS 2
@@ -18,7 +19,7 @@ public:
     Game();
     ~Game();
     Player *getPlayer(unsigned int playernum);
-    LinkedList *getBag();
+    TileBag *getBag();
     void setBag(std::string bagAsString);
     void setCurrentPlayer(int playerId);
     int getCurrentPlayer();
@@ -47,7 +48,7 @@ public:
 
 private:
     Player *players[MAX_NUM_OF_PLAYERS];
-    LinkedList *bag;
+    TileBag *bag;
     int currentPlayer;
     int playerCount;
     bool beingPlayed;

@@ -20,6 +20,7 @@ public:
 private:
     std::string name;
     int score;
+    bool repeatTurn;
     LinkedList *hand;
 };
 

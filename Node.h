@@ -6,7 +6,7 @@
 
 class Node {
 public:
-
+   Node();
    Node(Tile* tile, Node* next);
    ~Node();
    Node(Node& other);
