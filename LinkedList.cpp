@@ -1,96 +1,94 @@
+
 #include "LinkedList.h"
 #include <stdexcept>
-#include <iostream>
 
 LinkedList::LinkedList()
 {
    head = nullptr;
 }
+
+LinkedList::LinkedList(LinkedList &other)
+{
+   head = nullptr;
+   for (int i = 0; i < other.size(); ++i)
+   {
+      Tile *tile = new Tile(*other.get(i));
+      add_back(tile);
+   }
+}
 LinkedList::~LinkedList()
 {
-   Node *previous = head;
-   Node *current = head;
-   while (current->next != nullptr)
-   {
-      current = current->next;
-      delete previous;
-      previous = current;
-   }
-   delete current;
+   clear();
 }
+
 int LinkedList::size()
 {
-   int count = 0;
+
+   int length = 0;
+
    Node *current = head;
-   while (current->next != nullptr)
+   while (current != nullptr)
    {
-      count++;
+      ++length;
       current = current->next;
    }
-   return count;
+   return length;
 }
-void LinkedList::clear()
+
+Tile *LinkedList::get(int index)
 {
-   if (head->next != nullptr)
+   Tile *retTile = nullptr;
+
+   if (index >= 0 && index < size())
    {
-      Node *current = head->next;
-      Node *previous = current;
-      while (current->next != nullptr)
+
+      int counter = 0;
+      Node *current = head;
+
+      while (counter < index)
       {
+         ++counter;
          current = current->next;
-         delete previous;
-         previous = current;
       }
-      delete current;
-      head->next = nullptr;
+
+      retTile = current->tile;
    }
+   return retTile;
 }
-Tile *LinkedList::getNode(int i)
+std::string LinkedList::getContentAsString()
 {
-   if (i < 0)
+   std::string retValue = "";
+   for (int i = 0; i < this->size(); i++)
    {
-      throw std::invalid_argument("out of range integer given to LinkedList");
-   }
-   int count = -1;
-   Node *search = head;
-   while (search != nullptr)
-   {
-      if (count == i)
+      retValue += this->get(i)->fullName;
+      if (i < this->size() - 1)
       {
-         return search->tile;
+         retValue += ",";
       }
-      count++;
-      search = search->next;
    }
-   throw std::invalid_argument("out of range integer given to LinkedList");
+
+   return retValue;
 }
-void LinkedList::addFront(Tile *tile)
+void LinkedList::add_front(Tile *data)
 {
-   head->next = new Node(tile, head->next);
-}
-void LinkedList::addBack(Tile *tile)
-{
-   // if (head->next != nullptr) {
-   //    Node* current = head;
-   //    while (current->next != nullptr) {
-   //       current = current->next;
-   //    }
-   //    current->next = new Node(tile,current->next);
-   // }
-   // else {
-   //    head->next = new Node(tile, head->next);
-   // }
    Node *node = new Node();
-   node->tile = new Tile(*tile);
+   node->tile = data;
+   node->next = head;
+   head = node;
+}
+void LinkedList::add_back(Tile *data)
+{
+   Node *node = new Node();
+   node->tile = new Tile(*data);
    node->next = nullptr;
 
-   if (this->head == nullptr)
+   if (head == nullptr)
    {
-      this->head = node;
+      head = node;
    }
    else
    {
-      Node *current = this->head;
+      Node *current = head;
       while (current->next != nullptr)
       {
          current = current->next;
@@ -98,40 +96,105 @@ void LinkedList::addBack(Tile *tile)
       current->next = node;
    }
 }
-void LinkedList::delNode(int i)
+
+void LinkedList::remove_front()
 {
-   if (i < 0)
+   if (head != nullptr)
    {
-      throw std::invalid_argument("out of range integer given to LinkedList");
+      Node *toDelete = head;
+      head = head->next;
+
+      // delete toDelete->tile;
+      delete toDelete;
    }
-   int count = 0;
-   Node *search = head;
-   while (search != nullptr)
+   else
    {
-      if (count == i)
-      {
-         Node *target = search->next;
-         search->next = search->next->next;
-         delete target;
-      }
-      count++;
-      search = search->next;
+      throw std::runtime_error("Nothing to remove");
    }
-   throw std::invalid_argument("out of range integer given to LinkedList");
 }
-Tile *LinkedList::popNode()
+void LinkedList::remove_back()
 {
-   if (head->next != nullptr)
+
+   if (head != nullptr)
    {
       Node *current = head;
-      while (current->next->next != nullptr)
+      //pre should point to node before current;
+      Node *prev = nullptr;
+
+      while (current->next != nullptr)
       {
+         prev = current;
          current = current->next;
       }
-      Tile *temp = new Tile(*(current->next->tile));
-      delete current->next;
-      current->next = nullptr;
-      return temp;
+
+      if (prev == nullptr)
+      {
+         head = nullptr;
+      }
+      else
+      {
+         prev->next = nullptr;
+      }
+
+      delete current->tile;
+      delete current;
    }
-   throw std::invalid_argument("no nodes available to pop");
 }
+
+void LinkedList::remove(int index)
+{
+   if (index >= 0 && index < size())
+   {
+      if (head != nullptr)
+      {
+         int counter = 0;
+         Node *current = head;
+         //pre should point to node before current;
+         Node *prev = nullptr;
+
+         while (counter != index)
+         {
+            ++counter;
+            prev = current;
+            current = current->next;
+         }
+
+         if (prev == nullptr)
+         {
+            head = current->next;
+         }
+         else
+         {
+            prev->next = current->next;
+         }
+
+         // delete current->tile;
+         delete current;
+      }
+   }
+}
+
+void LinkedList::clear()
+{
+   while (head != nullptr)
+   {
+      remove_front();
+   }
+}
+
+// Tile *LinkedList::popNode()
+// {
+//    if (head->next != nullptr)
+//    {
+//       Node *current = head;
+//       while (current->next->next != nullptr)
+//       {
+//          current = current->next;
+//       }
+//       Tile *temp = new Tile(*(current->next->tile));
+//       delete current->next;
+//       current->next = nullptr;
+//       return temp;
+//    }
+//    throw std::invalid_argument("no nodes available to pop");
+// }

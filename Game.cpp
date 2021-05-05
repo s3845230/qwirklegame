@@ -111,11 +111,17 @@ void Game::addTilesToBag()
 
 void Game::distributeTilesToPlayers()
 {
-    // TODO
+    for (int i = 0; i < this->getPlayerCount(); i++)
+    {
+        for (int j = 0; j < GAME_DIM; j++)
+        {
+            this->addTileToPlayerHand(i);
+        }
+    }
 }
 void Game::addTileToPlayerHand(int playerId)
 {
-    // TODO
+    this->getPlayer(playerId)->add(this->bag->popTile());
 }
 void Game::placeTileInBoard(int selectedTileIndex, int row, int col)
 {

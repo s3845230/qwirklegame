@@ -2,7 +2,7 @@
 #define ASSIGN2_PLAYER_H
 
 #include <string>
-
+#include "Tile.h"
 #include "LinkedList.h"
 
 class Player
@@ -15,6 +15,7 @@ public:
     int getScore();
     LinkedList *getHand();
     void setScore(int score);
+    void add(Tile *tile);
     void showHand();
 
 private:

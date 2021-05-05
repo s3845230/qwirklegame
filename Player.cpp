@@ -34,12 +34,16 @@ void Player::setScore(int score)
 {
     this->score = score;
 }
+void Player::add(Tile *tile)
+{
+    this->hand->add_back(tile);
+}
 
 void Player::showHand()
 {
     for (int i = 0; i < this->hand->size(); i++)
     {
-        std::cout << this->hand->getNode(i)->colour << this->hand->getNode(i)->shape;
+        std::cout << this->hand->get(i)->colour << this->hand->get(i)->shape;
         if (i < this->hand->size() - 1)
         {
             std::cout << ",";

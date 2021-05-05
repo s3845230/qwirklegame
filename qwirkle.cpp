@@ -1,5 +1,6 @@
 
 #include "LinkedList.h"
+#include "TileBag.h"
 #include <iostream>
 #include "Game.h"
 #include "TileBag.h"
@@ -11,25 +12,33 @@ void getInput(std::string &input);
 void makeSelection(std::string, Game *&game, bool &gameRunning);
 int main(void)
 {
-   Game *game = new Game();
-   bool gameRunning = true;
-   welcomeMessage();
-   while (gameRunning)
-   {
-      showMenu();
-      std::string input;
-      getInput(input);
-      makeSelection(input, game, gameRunning);
+   TileBag *bag = new TileBag();
+   bag->shuffle();
 
-      while (game->isBeingPlayed())
-      {
-         game->showGameState();
-         getInput(input);
-         makeSelection(input, game, gameRunning);
-         // continue game play
-      }
+   for (int i = 0; i < 72; i++)
+   {
+      std::cout << bag->popTile()->fullName << std::endl;
+      // std::cout << this->tiles->get(i)->fullName << std::endl;
    }
-   delete game;
+   // Game *game = new Game();
+   // bool gameRunning = true;
+   // welcomeMessage();
+   // while (gameRunning)
+   // {
+   //    showMenu();
+   //    std::string input;
+   //    getInput(input);
+   //    makeSelection(input, game, gameRunning);
+
+   //    while (game->isBeingPlayed())
+   //    {
+   //       game->showGameState();
+   //       getInput(input);
+   //       makeSelection(input, game, gameRunning);
+   //       // continue game play
+   //    }
+   // }
+   // delete game;
 
    return EXIT_SUCCESS;
 }

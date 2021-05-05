@@ -16,15 +16,9 @@ TileBag::TileBag()
     {
         for (int j = 0; j < TILE_VARIATION; j++)
         {
-            this->tiles->addBack(new Tile(colours[i], shapes[j]));
-            this->tiles->addBack(new Tile(colours[i], shapes[j]));
+            this->tiles->add_back(new Tile(colours[i], shapes[j]));
+            this->tiles->add_back(new Tile(colours[i], shapes[j]));
         }
-    }
-
-    std::cout << "Tile Bag has " << this->tiles->size() << " tiles" << std::endl;
-    for (int i = 0; i < 71; i++)
-    {
-        std::cout << this->popTile()->fullName << std::endl;
     }
 }
 
@@ -41,17 +35,26 @@ void TileBag::shuffle()
     LinkedList *shuffleBag = new LinkedList();
 
     // for each tile in TileBag.tiles, select a random one and place it in shuffleBag
-    for (int i = 0; i < this->tiles->size(); i++)
+    // for (int i = 0; i < this->tiles->size(); i++)
+    // {
+    //     int randomIndex = rand() % this->tiles->size() + 1;
+    //     shuffleBag->addBack(this->tiles->getNode(randomIndex));
+    //     std::cout << "size of linkedlist " << this->tiles->size() << " rand num :" << randomIndex << std::endl;
+    //     this->tiles->delNode(randomIndex);
+    // }
+
+    while (this->tiles->size() > 0)
     {
-        int randomIndex = rand() % this->tiles->size() + 1;
-        shuffleBag->addBack(this->tiles->getNode(randomIndex));
-        this->tiles->delNode(randomIndex);
+        int randomIndex = rand() % this->tiles->size();
+        shuffleBag->add_back(this->tiles->get(randomIndex));
+        std::cout << "size of linkedlist " << this->tiles->size() << " rand num :" << randomIndex << std::endl;
+        this->tiles->remove(randomIndex);
     }
 
     // empty TileBag.tiles
     this->tiles->clear();
     // make TileBag.tiles equal to shuffleBag
-    this->tiles = shuffleBag;
+    this->tiles = new LinkedList(*shuffleBag);
 
     // free memory used for shuffleBag
     delete shuffleBag;
@@ -59,6 +62,8 @@ void TileBag::shuffle()
 
 Tile *TileBag::popTile()
 {
-    this->topTile = this->tiles->popNode();
+    this->topTile = new Tile(*this->tiles->get(0));
+    this->tiles->remove_front();
+
     return this->topTile;
 }
