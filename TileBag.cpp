@@ -13,8 +13,8 @@ TileBag::TileBag() {
     // adds two of each tile
     for (int i = 0; i < TILE_VARIATION; i++) {
         for (int j = 0; j < TILE_VARIATION; j++) {
-            this->tiles->addBack(new Node(new Tile(colours[i], shapes[j]), nullptr));
-            this->tiles->addBack(new Node(new Tile(colours[i], shapes[j]), nullptr));
+            this->tiles->addBack(new Tile(colours[i], shapes[j]));
+            this->tiles->addBack(new Tile(colours[i], shapes[j]));
         }
     }
 
@@ -48,7 +48,7 @@ void TileBag::shuffle() {
 
 Tile* TileBag::popTile() {
 
-    this->topTile = this->tiles->popNode()->tile;
+    this->topTile = this->tiles->popNode();
     return this->topTile;
 
 }

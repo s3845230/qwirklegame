@@ -95,6 +95,7 @@ Tile* LinkedList::popNode() {
       delete current->next;
       current->next = nullptr;
       return temp;
+      // Memory leak? temp is never deleted
    }
    throw std::invalid_argument("no nodes available to pop");
 }

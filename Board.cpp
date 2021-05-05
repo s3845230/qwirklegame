@@ -7,7 +7,7 @@ Board::~Board() {
 
 }
 
-void Board::placeTile(Tile* tile, int row, int col) {
+void Board::placeTile(int row, int col, Tile* tile) {
     this->state[row][col] = tile;
 }
 
