@@ -1,0 +1,16 @@
+2
+/testCases/test1/test1.save
+place P1 at I12
+place P6 at G12
+place B2 at K13
+place B4 at H13
+place Y6 at H11
+place B6 at H10
+place Y1 at I11
+place R6 at H10
+place Y4 at G11
+place Y5 at F11
+replace G2
+place Y2 at E11
+save test1Save
+^D
