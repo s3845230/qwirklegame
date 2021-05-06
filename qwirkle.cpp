@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Game.h"
 #include "TileBag.h"
+#include "Board.h"
 
 #define EXIT_SUCCESS 0
 void welcomeMessage();
@@ -35,6 +36,7 @@ int main(void)
 
    return EXIT_SUCCESS;
 }
+
 void welcomeMessage()
 {
    std::cout << std::endl;
@@ -92,7 +94,6 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
    //ends the program if 4 has been entered when the game is not being played
    else if (input.compare("4") == 0 && !game->isBeingPlayed())
    {
-
       game->endGame(gameRunning);
    }
    // ends the whole program if the eof character has been pressed
@@ -102,7 +103,6 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
    }
    else
    {
-      std::cout << std::endl;
       std::cout << "Invalid input" << std::endl;
       std::cout << std::endl;
       if (game->getPlayerCount() != 0)
