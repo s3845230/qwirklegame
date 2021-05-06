@@ -67,3 +67,8 @@ Tile *TileBag::popTile()
 
     return this->topTile;
 }
+
+int TileBag::size()
+{
+    return this->tiles->size();
+}

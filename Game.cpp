@@ -143,7 +143,23 @@ bool Game::fileExists(std::string fileName)
 }
 void Game::continueGamePlay(bool &gameRunning)
 {
-    // TODO
+    bool playerHandEmpty = false;
+    for (int i = 0; i < this->getPlayerCount(); i++)
+    {
+        if (this->getPlayer(i)->getHandAsString().compare("") == 0)
+        {
+            playerHandEmpty = true;
+        }
+    }
+    if (this->getBag()->size() == 0 && playerHandEmpty)
+    {
+        // show game over message
+        //end game
+    }
+    else
+    {
+        this->switchPlayer();
+    }
 }
 void Game::showGameOverMessage()
 {
@@ -152,7 +168,24 @@ void Game::showGameOverMessage()
 void Game::switchPlayer()
 {
 
-    // TODO
+    //if the player is not repeating their turn then switch players else remain the same
+    if (!this->getPlayer(this->getCurrentPlayer())->getRepeatTurn())
+    {
+        //if the current player is the last person on the list, make current player equal the first player
+        //else move on to the next player in the game
+        if (this->getCurrentPlayer() == this->getPlayerCount() - 1)
+        {
+            this->setCurrentPlayer(0);
+        }
+        else
+        {
+            this->setCurrentPlayer(this->getCurrentPlayer() + 1);
+        }
+    }
+    else
+    {
+        this->getPlayer(this->getCurrentPlayer())->setRepeatTurn(false);
+    }
 }
 void Game::startGame()
 {

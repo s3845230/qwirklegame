@@ -12,33 +12,26 @@ void getInput(std::string &input);
 void makeSelection(std::string, Game *&game, bool &gameRunning);
 int main(void)
 {
-   TileBag *bag = new TileBag();
-   bag->shuffle();
-
-   for (int i = 0; i < 72; i++)
+   Game *game = new Game();
+   bool gameRunning = true;
+   welcomeMessage();
+   while (gameRunning)
    {
-      std::cout << bag->popTile()->fullName << std::endl;
-      // std::cout << this->tiles->get(i)->fullName << std::endl;
-   }
-   // Game *game = new Game();
-   // bool gameRunning = true;
-   // welcomeMessage();
-   // while (gameRunning)
-   // {
-   //    showMenu();
-   //    std::string input;
-   //    getInput(input);
-   //    makeSelection(input, game, gameRunning);
+      showMenu();
+      std::string input;
+      getInput(input);
+      makeSelection(input, game, gameRunning);
 
-   //    while (game->isBeingPlayed())
-   //    {
-   //       game->showGameState();
-   //       getInput(input);
-   //       makeSelection(input, game, gameRunning);
-   //       // continue game play
-   //    }
-   // }
-   // delete game;
+      while (game->isBeingPlayed())
+      {
+         game->showGameState();
+         getInput(input);
+         makeSelection(input, game, gameRunning);
+         // continue game play
+         game->continueGamePlay(gameRunning);
+      }
+   }
+   delete game;
 
    return EXIT_SUCCESS;
 }

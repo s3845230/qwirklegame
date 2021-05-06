@@ -24,6 +24,14 @@ int Player::getScore()
 {
     return this->score;
 }
+bool Player::getRepeatTurn()
+{
+    return this->repeatTurn;
+}
+void Player::setRepeatTurn(bool repeatTurn)
+{
+    this->repeatTurn = repeatTurn;
+}
 
 LinkedList *Player::getHand()
 {
@@ -50,4 +58,8 @@ void Player::showHand()
         }
     }
     std::cout << std::endl;
+}
+std::string Player::getHandAsString()
+{
+    return this->hand->getContentAsString();
 }

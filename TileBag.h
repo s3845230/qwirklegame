@@ -9,6 +9,7 @@ class TileBag {
 
         TileBag();
         ~TileBag();
+        int size();
         void shuffle();
         Tile* popTile();
 
