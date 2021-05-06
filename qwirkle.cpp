@@ -61,7 +61,7 @@ void getInput(std::string &input)
 
 void makeSelection(std::string input, Game *&game, bool &gameRunning)
 {
-   if (input.compare("1") == 0)
+   if (input.compare("1") == 0 && !game->isBeingPlayed())
    {
       std::string tempName;
       std::cout << "Starting a New Game" << std::endl;
@@ -79,11 +79,11 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
 
       game->startGame();
    }
-   else if (input.compare("2") == 0)
+   else if (input.compare("2") == 0 && !game->isBeingPlayed())
    {
       std::cout << "Load Game selected" << std::endl;
    }
-   else if (input.compare("3") == 0)
+   else if (input.compare("3") == 0 && !game->isBeingPlayed())
    {
       std::cout << "Credits selected" << std::endl;
    }
@@ -91,5 +91,15 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
    {
 
       std::cout << "Quit selected" << std::endl;
+   }
+   else
+   {
+      std::cout << std::endl;
+      std::cout << "Invalid input" << std::endl;
+      std::cout << std::endl;
+      if (game->getPlayerCount() != 0)
+      {
+         game->getPlayer(game->getCurrentPlayer())->setRepeatTurn(true);
+      }
    }
 }

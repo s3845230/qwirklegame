@@ -8,6 +8,7 @@
 Game::Game()
 {
     this->bag = new TileBag();
+    this->setBeingPlayed(false);
     this->currentPlayer = 0;
     this->playerCount = 0;
 }
