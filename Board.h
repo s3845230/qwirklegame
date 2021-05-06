@@ -5,6 +5,9 @@
 #include "Tile.h"
 
 #define BOARD_DIM 26
+#define QWIRKLE_LEN 6
+#define COLOUR 'C'
+#define SHAPE 'S'
 
 class Board {
     public:
@@ -15,6 +18,9 @@ class Board {
         Tile* getTile(int row, int col);
 
         std::vector<std::vector<Tile*>> getState();
+
+        int scoreValidate(int row, int col, Tile* newTile);
+        bool isLocationAvailable(int row, int col);
 
     private:
         std::vector<std::vector<Tile*>> state;

@@ -6,7 +6,6 @@ score
 
 SCOREVALIDATE(s):
 
-
     score = [0,0,0,0]
 
     directionTravel = [1,0,-1,0,0,1,0,-1]
@@ -28,7 +27,7 @@ SCOREVALIDATE(s):
         
         (checks if node is the same shape or colour, and updates the search match booleans accordingly)
         IF node.colour == s.colour AND node.shape == s.shape DO
-            RETURN score (can't have of the same tile touching)
+            RETURN 0 (can't have of the same tile touching)
 
         ELSE IF node.colour == s.colour DO
             directionAttribute[direction] = "colour"
@@ -44,7 +43,7 @@ SCOREVALIDATE(s):
         WHILE halt != true DO
 
             (if score in any direction is greater than six, it's invalid)
-            IF score[0+1] > 6 OR score[2+3] DO
+            IF score[0+1] > 6 OR score[2+3] > 6 DO
                 RETURN 0
 
             TRY
