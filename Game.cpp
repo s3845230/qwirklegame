@@ -8,6 +8,7 @@
 Game::Game()
 {
     this->bag = new TileBag();
+    this->board = new Board();
     this->setBeingPlayed(false);
     this->currentPlayer = 0;
     this->playerCount = 0;
@@ -191,7 +192,6 @@ void Game::switchPlayer()
 void Game::startGame()
 {
     this->setBeingPlayed(true);
-    this->board = new Board();
 
     this->addTilesToBag();
     this->distributeTilesToPlayers();

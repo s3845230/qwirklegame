@@ -57,6 +57,7 @@ void getInput(std::string &input)
 {
    std::cout << "> ";
    std::getline(std::cin, input);
+   std::cout << std::endl;
 }
 
 void makeSelection(std::string input, Game *&game, bool &gameRunning)
@@ -83,14 +84,21 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
    {
       std::cout << "Load Game selected" << std::endl;
    }
+   //shows the credits 3 has been entered when the game is not being played
    else if (input.compare("3") == 0 && !game->isBeingPlayed())
    {
-      std::cout << "Credits selected" << std::endl;
+      game->showCredits();
    }
-   else if (input.compare("4") == 0)
+   //ends the program if 4 has been entered when the game is not being played
+   else if (input.compare("4") == 0 && !game->isBeingPlayed())
    {
 
-      std::cout << "Quit selected" << std::endl;
+      game->endGame(gameRunning);
+   }
+   // ends the whole program if the eof character has been pressed
+   else if (std::cin.eof())
+   {
+      game->endGame(gameRunning);
    }
    else
    {
