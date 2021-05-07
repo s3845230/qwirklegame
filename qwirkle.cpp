@@ -278,6 +278,13 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
    {
       game->endGame(gameRunning);
    }
+   // SAVE GAME
+   else if (input.find("save") != std::string::npos)
+   {
+      std::string filename = input.substr(5);
+      
+      game->saveGame(filename);
+   }
 
    // INVALID INPUT
    else

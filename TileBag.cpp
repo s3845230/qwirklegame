@@ -83,3 +83,18 @@ void TileBag::addTile(Tile *data)
 {
     tiles->add_back(data);
 }
+
+std::string TileBag::getBagAsString()
+{
+   std::string retValue = "";
+   for (int i = 0; i < this->size(); i++)
+   {
+      retValue += this->tiles->get(i)->fullName;
+      if (i < this->size() - 1)
+      {
+         retValue += ",";
+      }
+   }
+
+   return retValue;
+}

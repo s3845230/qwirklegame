@@ -157,7 +157,16 @@ void Game::replaceTileInHand(int selectedTileIndex)
 
 void Game::saveGame(std::string filename)
 {
-    // TODO
+    std::ofstream outputFile(filename);
+    for(int i = 0; i < this->getPlayerCount(); i++)
+    {
+        outputFile << this->getPlayer(i)->getName() << std::endl;
+        outputFile << this->getPlayer(i)->getScore() << std::endl;
+        outputFile << this->getPlayer(i)->getHandAsString() << std::endl;   
+    }
+    outputFile << BOARD_DIM << "," << BOARD_DIM << std::endl;
+    outputFile << this->getBoard()->getStateAsString() << std::endl;
+    outputFile << this->getBag()->getBagAsString() << std::endl;
 }
 
 bool Game::fileExists(std::string fileName)
