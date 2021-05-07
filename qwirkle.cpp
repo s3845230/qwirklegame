@@ -95,7 +95,15 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
       // START GAME
       game->startGame();
    }
-
+   // LOAD GAME
+   else if (input.compare("2") == 0)
+   {
+      std::cout << std::endl;
+      std::string filename;
+      std::cout << "Enter the filename from which load a game" << std::endl;
+      getInput(filename);
+      game->loadGame(filename);
+   }
    // REPLACE TILE
    else if (input.find("replace") != std::string::npos) {
       if (game->getBag()->size() == 0) {

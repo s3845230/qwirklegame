@@ -24,6 +24,7 @@ public:
     void setRepeatTurn(bool repeatTurn);
 
     void showHand();
+    void setHand(std::string handAsString);
     std::string getHandAsString();
 
 private:
