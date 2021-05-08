@@ -23,47 +23,58 @@ Game::~Game()
         delete this->players[i];
     }
 }
+
 void Game::addPlayer(std::string name)
 {
     this->playerCount++;
     this->players[this->playerCount - 1] = new Player(name);
 }
+
 Player *Game::getPlayer(unsigned int playernum)
 {
     return this->players[playernum];
 }
-TileBag *Game::getBag()
-{
-    return this->bag;
-}
+
+// TileBag *Game::getBag()
+// {
+//     return this->bag;
+// }
+
 void Game::setBag(std::string bagAsString)
 {
     // TODO
 }
+
 void Game::setCurrentPlayer(int playerId)
 {
     this->currentPlayer = playerId;
 }
+
 int Game::getCurrentPlayer()
 {
     return this->currentPlayer;
 }
+
 int Game::getPlayerCount()
 {
     return this->playerCount;
 }
-Board *Game::getBoard()
-{
-    return this->board;
-}
+
+// Board *Game::getBoard()
+// {
+//     return this->board;
+// }
+
 void Game::loadGame(std::string filename)
 {
     //TODO
 }
+
 void Game::loadGameState(std::string fileArray[])
 {
     //TODO
 }
+
 void Game::showCredits()
 {
     std::cout << "----------------------------------" << std::endl;
@@ -74,6 +85,7 @@ void Game::showCredits()
     std::cout << "----------------------------------" << std::endl;
     std::cout << std::endl;
 }
+
 void Game::printStudentDetails(std::string fullname, std::string stuNo, std::string email)
 {
     std::cout << "Name: " << fullname << std::endl;
@@ -86,10 +98,12 @@ void Game::setBeingPlayed(bool playState)
 {
     this->beingPlayed = playState;
 }
+
 bool Game::isBeingPlayed()
 {
     return this->beingPlayed;
 }
+
 void Game::showGameState()
 {
     std::cout << this->getPlayer(this->getCurrentPlayer())->getName() << ", it's your turn" << std::endl;
@@ -121,11 +135,13 @@ void Game::distributeTilesToPlayers()
         }
     }
 }
+
 void Game::addTileToPlayerHand(int playerId)
 {
-    this->getPlayer(playerId)->add(this->bag->popTile());
+    this->getPlayer(playerId)->addTile(this->bag->popTile());
 }
-void Game::placeTileInBoard(int selectedTileIndex, int row, int col)
+
+void Game::placeTileOnBoard(int selectedTileIndex, int row, int col)
 {
     // TODO
 }
@@ -134,15 +150,18 @@ void Game::replaceTileInHand(int selectedTileIndex)
 {
     // TODO
 }
+
 void Game::saveGame(std::string filename)
 {
     // TODO
 }
+
 bool Game::fileExists(std::string fileName)
 {
     std::ifstream infile(fileName);
     return infile.good();
 }
+
 void Game::continueGamePlay(bool &gameRunning)
 {
     bool playerHandEmpty = false;
@@ -153,7 +172,7 @@ void Game::continueGamePlay(bool &gameRunning)
             playerHandEmpty = true;
         }
     }
-    if (this->getBag()->size() == 0 && playerHandEmpty)
+    if (this->bag->size() == 0 && playerHandEmpty)
     {
         // show game over message
         //end game
@@ -163,10 +182,12 @@ void Game::continueGamePlay(bool &gameRunning)
         this->switchPlayer();
     }
 }
+
 void Game::showGameOverMessage()
 {
     // TODO
 }
+
 void Game::switchPlayer()
 {
 
@@ -189,6 +210,7 @@ void Game::switchPlayer()
         this->getPlayer(this->getCurrentPlayer())->setRepeatTurn(false);
     }
 }
+
 void Game::startGame()
 {
     this->setBeingPlayed(true);
@@ -196,6 +218,7 @@ void Game::startGame()
     this->addTilesToBag();
     this->distributeTilesToPlayers();
 }
+
 void Game::endGame(bool &gameRunning)
 {
     std::cout << std::endl;

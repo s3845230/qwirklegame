@@ -13,101 +13,84 @@ Board::Board()
         }
     }
 }
-Board::~Board()
-{
+
+Board::~Board() {
 }
-void Board::showBoard()
-{
+
+void Board::showBoard() {
     char characters = 65;
 
-    for (int i = 0; i < BOARD_DIM; i++)
-    {
-        if (i == 0)
-        {
-            for (int k = 0; k < BOARD_DIM; k++)
-            {
-                if (k == 0)
-                {
+    for (int i = 0; i < BOARD_DIM; i++) {
+        if (i == 0) {
+            for (int k = 0; k < BOARD_DIM; k++) {
+                if (k == 0) {
                     std::cout << "   ";
                 }
-                if (k <= 9)
-                {
+                if (k <= 9) {
                     std::cout << k << "  ";
                 }
-                else
-                {
+                else {
                     std::cout << k << " ";
                 }
             }
             std::cout << std::endl;
             std::cout << "  -------------------------------------------------------------------------------" << std::endl;
         }
-        for (int j = 0; j < BOARD_DIM; j++)
-        {
-            if (j == 0)
-            {
+        for (int j = 0; j < BOARD_DIM; j++) {
+            if (j == 0) {
                 std::cout << characters << " |";
                 characters++;
             }
-            if (this->state[i][j] == nullptr)
-            {
+            if (this->state[i][j] == nullptr) {
                 std::cout << "  |";
             }
-            else
-            {
+            else {
                 std::cout << this->state[i][j]->colour << this->state[i][j]->shape << "|";
             }
         }
+
         std::cout << std::endl;
     }
 }
-bool Board::isLocationAvailable(int row, int col)
-{
+
+bool Board::isLocationAvailable(int row, int col) {
 
     bool retValue = false;
 
-    if (this->state[row][col] == nullptr)
-    {
+    if (this->state[row][col] == nullptr) {
         retValue = true;
     }
 
     return retValue;
 }
 
-void Board::placeTile(int row, int col, Tile *tile)
-{
+void Board::placeTile(int row, int col, Tile *tile) {
     this->state[row][col] = new Tile(*tile);
 }
-std::string Board::getStateAsString()
-{
-    std::string retValue = "";
-    char characters = 65;
 
-    for (int i = 0; i < BOARD_DIM; i++)
-    {
-        for (int j = 0; j < BOARD_DIM; j++)
-        {
-            if (this->state[i][j] != nullptr)
-            {
-                if (retValue.compare("") == 0)
-                {
-                    retValue += this->state[i][j]->fullName + "@" + char(characters + i) + std::to_string(j);
+std::string Board::getStateAsString() {
+    std::string stateAsString = "";
+    char characters = 65; // what does this magic number do?
+
+    for (int i = 0; i < BOARD_DIM; i++) {
+        for (int j = 0; j < BOARD_DIM; j++) {
+            if (this->state[i][j] != nullptr) {
+                if (stateAsString.compare("") == 0) {
+                    stateAsString += this->state[i][j]->fullName + "@" + char(characters + i) + std::to_string(j);
                 }
-                else
-                {
-                    retValue += ", " + this->state[i][j]->fullName + "@" + char(characters + i) + std::to_string(j);
+                else {
+                    stateAsString += ", " + this->state[i][j]->fullName + "@" + char(characters + i) + std::to_string(j);
                 }
             }
         }
     }
 
-    return retValue;
+    return stateAsString;
 }
-void Board::setBoard(std::string boardAsString)
-{
 
-    for (int i = 0; i < boardAsString.length(); i += 7)
-    {
+void Board::setBoard(std::string boardAsString) {
+
+    for (int i = 0; i < int(boardAsString.length()); i += 7) {
         std::string tile = boardAsString.substr(i, 2);
         char colour = tile[0];
         int shape = stoi(tile.substr(1));
@@ -119,28 +102,26 @@ void Board::setBoard(std::string boardAsString)
         // std::cout << "i + 3 = " << i << " = " << boardAsString[i + 3] << std::endl;
         // std::cout << "i + 4 = " << i << " = " << boardAsString[i + 4] << std::endl;
 
-        if (boardAsString.substr(i + 5, 1).compare(",") == 0 || (i + 5) == boardAsString.length())
-        {
+        if (boardAsString.substr(i + 5, 1).compare(",") == 0 || (i + 5) == int(boardAsString.length())) {
             col = stoi(boardAsString.substr(i + 4, 1));
             // std::cout << "comma found or end of line" << std::endl;
         }
-        else
-        {
+        else {
             // std::cout << "i + 5 = " << i << " = " << boardAsString[i + 5] << std::endl;
             col = stoi(boardAsString.substr(i + 4, 2));
             i++;
         }
+
         Tile *newTile = new Tile(colour, shape);
         this->placeTile(row, col, newTile);
     }
 }
-std::vector<std::vector<Tile *> > Board::getState()
-{
+
+std::vector<std::vector<Tile *> > Board::getState() {
     return state;
 }
 
-int Board::scoreValidate(int row, int col, Tile *newTile)
-{
+int Board::scoreValidate(int row, int col, Tile *newTile) {
 
     // BUGS:
     // REMOVE placeTile() FROM Board.cpp: IT BELONGS IN THE GAME LOGIC CLASS
@@ -148,8 +129,7 @@ int Board::scoreValidate(int row, int col, Tile *newTile)
     std::cout << "row: " << row << "\tcol: " << col << "\tnewTile: " << newTile->colour << newTile->shape << std::endl;
 
     // LOCATION VALIDATION
-    if (!isLocationAvailable(row, col))
-    {
+    if (!isLocationAvailable(row, col)) {
         std::cout << "LOCATION NOT AVAIABLE" << std::endl;
         return 0;
     }
@@ -159,8 +139,7 @@ int Board::scoreValidate(int row, int col, Tile *newTile)
     int directionTravel[8] = {1, 0, -1, 0, 0, 1, 0, -1};
     char directionAttribute[2];
 
-    for (int i = 0; i < 4; i++)
-    {
+    for (int i = 0; i < 4; i++) {
 
         // INITALISE LOCATION VIEWING
         int nextRow = row + directionTravel[i];
@@ -169,50 +148,40 @@ int Board::scoreValidate(int row, int col, Tile *newTile)
         int direction = i % 2;
         Tile *tile;
 
-        if (!isLocationAvailable(nextRow, nextCol))
-        {
+        if (!isLocationAvailable(nextRow, nextCol)) {
             // CHECKING TO SEE IF FOUR IMMEDIATE NEIGHBOURS ARE VALID
             tile = this->state[nextRow][nextCol];
 
-            if (tile->colour == newTile->colour && tile->shape == newTile->shape)
-            {
+            if (tile->colour == newTile->colour && tile->shape == newTile->shape) {
                 std::cout << "SAME TILE AS NEIGHBOUR; INVALID" << std::endl;
                 return 0;
             }
-            else if (tile->colour == newTile->colour)
-            {
+            else if (tile->colour == newTile->colour) {
                 directionAttribute[direction] = COLOUR;
                 score[i]++;
             }
-            else if (tile->shape == newTile->shape)
-            {
+            else if (tile->shape == newTile->shape) {
                 directionAttribute[direction] = SHAPE;
                 score[i]++;
             }
-            else
-            {
+            else {
                 std::cout << "NEIGHBORMATCH else{}" << std::endl;
                 return 0;
             }
 
             // CHECKING TO SEE IF EACH SEQUENCE FOLLOWING THE NEIGHBOURS ARE VALID
-            while (!isLocationAvailable(nextRow, nextCol))
-            {
+            while (!isLocationAvailable(nextRow, nextCol)) {
 
                 tile = this->state[nextRow][nextCol];
 
-                if ((directionAttribute[direction] == SHAPE) && (tile->shape == newTile->shape))
-                {
+                if ((directionAttribute[direction] == SHAPE) && (tile->shape == newTile->shape)) {
                     score[i]++;
                 }
-                else if ((directionAttribute[direction] == COLOUR) && (tile->colour == newTile->colour))
-                {
+                else if ((directionAttribute[direction] == COLOUR) && (tile->colour == newTile->colour)) {
                     score[i]++;
                 }
-                // SEQUENCE CANNOT BE CONTINUED, 0 SCORE: NOT VALID
-                else
-                {
-                    std::cout << "SEQUENCEMATCH else{}" << std::endl;
+                else {
+                    // SEQUENCE CANNOT BE CONTINUED, 0 SCORE: NOT VALID
                     return 0;
                 }
 
@@ -221,8 +190,7 @@ int Board::scoreValidate(int row, int col, Tile *newTile)
             }
 
             // CANNOT PLACE TILE IN A SEQUENCE LONGER THAN THE QWIRKLE LENGTH (MUST BE REPEATS)
-            if (((score[0] + score[2]) > QWIRKLE_LEN) || ((score[1] + score[3]) > QWIRKLE_LEN))
-            {
+            if (((score[0] + score[2]) > QWIRKLE_LEN) || ((score[1] + score[3]) > QWIRKLE_LEN)) {
                 std::cout << "SEQUENCE > QWIRKLE_LEN" << std::endl;
                 return 0;
             }
@@ -232,20 +200,18 @@ int Board::scoreValidate(int row, int col, Tile *newTile)
     }
 
     // ALL NEIGHBOURS ARE EMPTY (NOT VALID)
-    if (score[0] + score[1] + score[2] + score[3])
-    {
+    if (score[0] + score[1] + score[2] + score[3]) {
         return 0;
     }
 
     placeTile(row, col, newTile);
 
     // CHECK FOR QWIRKLES
-    for (int i = 0; i < 4; i++)
-    {
-        if (score[i] == 6)
-        {
+    for (int i = 0; i < 4; i++) {
+        if (score[i] == 6) {
             score[i] += 6;
         }
     }
+
     return score[0] + score[1] + score[2] + score[3];
 }

@@ -18,41 +18,65 @@ class Game
 public:
     Game();
     ~Game();
-    Player *getPlayer(unsigned int playernum);
-    TileBag *getBag();
-    void setBag(std::string bagAsString);
-    void setCurrentPlayer(int playerId);
-    int getCurrentPlayer();
-    int getPlayerCount();
-    Board *getBoard();
+
+
+    // TileBag *getBag();
+    // Board *getBoard();
+
+    // STARTING GAME
+    void startGame();
+    void distributeTilesToPlayers();
+
     void addPlayer(std::string name);
+
+    // SAVING GAME TO SAVEFILE
+    void saveGame(std::string filename);
+
+    // LOADING GAME FROM SAVEFILE
     void loadGame(std::string filename);
     void loadGameState(std::string fileArray[]);
-    void showCredits();
-    void printStudentDetails(std::string fullname, std::string stuNo, std::string email);
     void setBeingPlayed(bool playState);
+    void setCurrentPlayer(int playerId);
+    void setBag(std::string bagAsString);
+
+    // GAME STATUS
     bool isBeingPlayed();
     void showGameState();
-    void addTilesToBag();
-    void distributeTilesToPlayers();
-    void addTileToPlayerHand(int playerId);
-    void placeTileInBoard(int selectedTileIndex, int row, int col);
-    void replaceTileInHand(int selectedTileIndex);
-    void saveGame(std::string filename);
-    bool fileExists(std::string filename);
     void continueGamePlay(bool &gameRunning);
-    void showGameOverMessage();
+
+    // FILE STATUS
+    bool fileExists(std::string filename);
+
+    // PLAYER FUNCTIONS
+    Player *getPlayer(unsigned int playernum);
+    int getCurrentPlayer();
+    int getPlayerCount();
     void switchPlayer();
-    void startGame();
+
+    // TILE FUNCTIONS
+    void addTileToPlayerHand(int playerId);
+    void placeTileOnBoard(int selectedTileIndex, int row, int col);
+    void replaceTileInHand(int selectedTileIndex);
+    void addTilesToBag();
+
+    // PRINT FUNCTIONS
+    void showCredits();
+    void showGameOverMessage();
+    void printStudentDetails(std::string fullname, std::string stuNo, std::string email);
+
+    // END GAME
     void endGame(bool &gameRunning);
 
 private:
     Player *players[MAX_NUM_OF_PLAYERS];
     TileBag *bag;
+    Board *board;
+
     int currentPlayer;
     int playerCount;
+
     bool beingPlayed;
-    Board *board;
+
 };
 
 #endif // ASSIGN2_GAME_H

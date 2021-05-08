@@ -17,7 +17,7 @@ public:
     void setScore(int score);
     bool getRepeatTurn();
     void setRepeatTurn(bool repeatTurn);
-    void add(Tile *tile);
+    void addTile(Tile *tile);
     void showHand();
     std::string getHandAsString();
 
