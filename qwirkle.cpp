@@ -64,22 +64,30 @@ void getInput(std::string &input)
 
 void makeSelection(std::string input, Game *&game, bool &gameRunning)
 {
+   // NEW GAME
    if (input.compare("1") == 0 && !game->isBeingPlayed())
    {
       std::string tempName;
-      std::cout << "Starting a New Game" << std::endl;
+      std::cout << "Starting a New Game" << std::endl << std::endl;;
       std::cout << std::endl;
+
+      // PLAYER 1 NAME INPUT
       std::cout << "Enter a name for player 1 (uppercase characters only)" << std::endl;
       getInput(tempName);
       game->addPlayer(tempName);
       std::cout << std::endl;
+
+      // PLAYER 2 NAME INPUT
       std::cout << "Enter a name for player 2 (uppercase characters only)" << std::endl;
       getInput(tempName);
       game->addPlayer(tempName);
       std::cout << std::endl;
+
+      // WELCOME MESSAGE
       std::cout << "Let's Play!" << std::endl;
       std::cout << std::endl;
 
+      // START GAME
       game->startGame();
    }
    else if (input.compare("2") == 0 && !game->isBeingPlayed())

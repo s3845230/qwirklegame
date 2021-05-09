@@ -19,14 +19,12 @@ public:
     Game();
     ~Game();
 
-
     // TileBag *getBag();
     // Board *getBoard();
 
     // STARTING GAME
     void startGame();
     void distributeTilesToPlayers();
-
     void addPlayer(std::string name);
 
     // SAVING GAME TO SAVEFILE

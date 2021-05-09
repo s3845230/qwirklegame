@@ -44,7 +44,7 @@ void TileBag::shuffle()
 
         int randomIndex = uniform_dist(engine);
         shuffleBag->add_back(this->tiles->get(randomIndex));
-        std::cout << "size of linkedlist " << this->tiles->size() << " rand num :" << randomIndex << std::endl;
+        // std::cout << "size of linkedlist " << this->tiles->size() << " rand num :" << randomIndex << std::endl;
         this->tiles->remove(randomIndex);
     }
 
