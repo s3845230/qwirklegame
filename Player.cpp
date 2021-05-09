@@ -42,6 +42,9 @@ void Player::setScore(int score)
 {
     this->score = score;
 }
+void Player::addScore(int score) {
+    this->score+=score;
+}
 void Player::addTile(Tile *tile)
 {
     this->hand->add_back(tile);

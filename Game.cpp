@@ -10,7 +10,7 @@ Game::Game()
     this->bag = new TileBag();
     this->board = new Board();
     this->setBeingPlayed(false);
-    this->currentPlayer = 0;
+    this->currentPlayerID = 0;
     this->playerCount = 0;
 }
 
@@ -35,24 +35,24 @@ Player *Game::getPlayer(unsigned int playernum)
     return this->players[playernum];
 }
 
-// TileBag *Game::getBag()
-// {
-//     return this->bag;
-// }
+TileBag *Game::getBag()
+{
+    return this->bag;
+}
 
 void Game::setBag(std::string bagAsString)
 {
     // TODO
 }
 
-void Game::setCurrentPlayer(int playerId)
+void Game::setCurrentPlayerID(int playerID)
 {
-    this->currentPlayer = playerId;
+    this->currentPlayerID = playerID;
 }
 
-int Game::getCurrentPlayer()
+int Game::getCurrentPlayerID()
 {
-    return this->currentPlayer;
+    return this->currentPlayerID;
 }
 
 int Game::getPlayerCount()
@@ -60,10 +60,10 @@ int Game::getPlayerCount()
     return this->playerCount;
 }
 
-// Board *Game::getBoard()
-// {
-//     return this->board;
-// }
+Board *Game::getBoard()
+{
+    return this->board;
+}
 
 void Game::loadGame(std::string filename)
 {
@@ -106,7 +106,7 @@ bool Game::isBeingPlayed()
 
 void Game::showGameState()
 {
-    std::cout << this->getPlayer(this->getCurrentPlayer())->getName() << ", it's your turn" << std::endl;
+    std::cout << this->getPlayer(this->getCurrentPlayerID())->getName() << ", it's your turn" << std::endl;
     for (int i = 0; i < this->getPlayerCount(); i++)
     {
         std::cout << "Score for " << this->getPlayer(i)->getName() << ": " << this->getPlayer(i)->getScore() << std::endl;
@@ -116,7 +116,7 @@ void Game::showGameState()
 
     std::cout << std::endl;
     std::cout << "Your hand is" << std::endl;
-    this->getPlayer(this->getCurrentPlayer())->showHand();
+    this->getPlayer(this->getCurrentPlayerID())->showHand();
 }
 
 void Game::addTilesToBag()
@@ -136,23 +136,23 @@ void Game::distributeTilesToPlayers()
     }
 }
 
-void Game::addTileToPlayerHand(int playerId)
+void Game::addTileToPlayerHand(int playerID)
 {
-    this->getPlayer(playerId)->addTile(this->bag->popTile());
+    this->getPlayer(playerID)->addTile(this->bag->popTile());
 }
 
-void Game::placeTileOnBoard(int selectedTileIndex, int row, int col)
+void Game::placeTileOnBoard(Tile* tile, int row, int col)
 {
-    // TODO
+    this->board->placeTile(tile, row, col);
 }
 
-void Game::replaceTileInHand(int selectedTileIndex, int playerId)
+void Game::replaceTileInHand(int selectedTileIndex, int playerID)
 {
-    Tile* oldTile = new Tile(*this->getPlayer(playerId)->getHand()->get(selectedTileIndex));
-    this->getPlayer(playerId)->getHand()->remove(selectedTileIndex);    //take tile from hand
+    Tile* oldTile = new Tile(*this->getPlayer(playerID)->getHand()->get(selectedTileIndex));
+    this->getPlayer(playerID)->getHand()->remove(selectedTileIndex);    //take tile from hand
     this->bag->addTile(oldTile);                                        //put tile in bag
     this->bag->shuffle();                                               //shuffle bag
-    this->addTileToPlayerHand(playerId);                                //get new tile
+    this->addTileToPlayerHand(playerID);                                //get new tile
 }
 
 void Game::saveGame(std::string filename)
@@ -196,22 +196,22 @@ void Game::switchPlayer()
 {
 
     //if the player is not repeating their turn then switch players else remain the same
-    if (!this->getPlayer(this->getCurrentPlayer())->getRepeatTurn())
+    if (!this->getPlayer(this->getCurrentPlayerID())->getRepeatTurn())
     {
         //if the current player is the last person on the list, make current player equal the first player
         //else move on to the next player in the game
-        if (this->getCurrentPlayer() == this->getPlayerCount() - 1)
+        if (this->getCurrentPlayerID() == this->getPlayerCount() - 1)
         {
-            this->setCurrentPlayer(0);
+            this->setCurrentPlayerID(0);
         }
         else
         {
-            this->setCurrentPlayer(this->getCurrentPlayer() + 1);
+            this->setCurrentPlayerID(this->getCurrentPlayerID() + 1);
         }
     }
     else
     {
-        this->getPlayer(this->getCurrentPlayer())->setRepeatTurn(false);
+        this->getPlayer(this->getCurrentPlayerID())->setRepeatTurn(false);
     }
 }
 

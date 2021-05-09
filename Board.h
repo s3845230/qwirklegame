@@ -14,8 +14,11 @@ class Board
 public:
     Board();
     ~Board();
+    
+    // LET FIRST MOVE BE ANY PLAY
+    bool firstMoveTaken;
 
-    void placeTile(int row, int col, Tile *tile);
+    void placeTile(Tile* tile, int row, int col);
     Tile *getTile(int row, int col);
 
     std::vector<std::vector<Tile *> > getState();
@@ -28,6 +31,7 @@ public:
 
 private:
     std::vector<std::vector<Tile *> > state;
+
 };
 
 #endif // ASSIGN2_BOARD_H

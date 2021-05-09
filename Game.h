@@ -19,8 +19,8 @@ public:
     Game();
     ~Game();
 
-    // TileBag *getBag();
-    // Board *getBoard();
+    TileBag *getBag();
+    Board *getBoard();
 
     // STARTING GAME
     void startGame();
@@ -34,7 +34,7 @@ public:
     void loadGame(std::string filename);
     void loadGameState(std::string fileArray[]);
     void setBeingPlayed(bool playState);
-    void setCurrentPlayer(int playerId);
+
     void setBag(std::string bagAsString);
 
     // GAME STATUS
@@ -42,18 +42,20 @@ public:
     void showGameState();
     void continueGamePlay(bool &gameRunning);
 
+
     // FILE STATUS
     bool fileExists(std::string filename);
 
     // PLAYER FUNCTIONS
     Player *getPlayer(unsigned int playernum);
-    int getCurrentPlayer();
     int getPlayerCount();
+    int getCurrentPlayerID();
+    void setCurrentPlayerID(int playerID);
     void switchPlayer();
 
     // TILE FUNCTIONS
-    void addTileToPlayerHand(int playerId);
-    void placeTileOnBoard(int selectedTileIndex, int row, int col);
+    void addTileToPlayerHand(int playerID);
+    void placeTileOnBoard(Tile* tile, int row, int col);
     void replaceTileInHand(int selectedTileIndex, int playerID);
     void addTilesToBag();
 
@@ -70,7 +72,7 @@ private:
     TileBag *bag;
     Board *board;
 
-    int currentPlayer;
+    int currentPlayerID;
     int playerCount;
 
     bool beingPlayed;

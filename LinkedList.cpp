@@ -182,6 +182,18 @@ void LinkedList::clear()
    }
 }
 
+int LinkedList::getIndex(std::string tileString) {
+   int index = -1;
+   
+   for (int i = 0; i < this->size(); i++) {
+      if (this->get(i)->fullName.compare(tileString) == 0) {
+         index = i;
+      }
+   }
+
+   return index;
+}
+
 // Tile *LinkedList::popNode()
 // {
 //    if (head->next != nullptr)

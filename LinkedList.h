@@ -14,6 +14,9 @@ public:
    int size();
 
    Tile *get(int index);
+
+   int getIndex(std::string tileString); // returns index of Tile pointer
+
    std::string getContentAsString();
    void add_front(Tile *data);
    void add_back(Tile *data);

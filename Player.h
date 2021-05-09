@@ -14,10 +14,15 @@ public:
     std::string getName();
     int getScore();
     LinkedList *getHand();
+
+    void addTile(Tile *tile);
+
     void setScore(int score);
+    void addScore(int score);
+
     bool getRepeatTurn();
     void setRepeatTurn(bool repeatTurn);
-    void addTile(Tile *tile);
+
     void showHand();
     std::string getHandAsString();
 
