@@ -95,6 +95,45 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
       // START GAME
       game->startGame();
    }
+   
+   // REPLACE TILE
+   if (input.find("replace") != std::string::npos) {
+      if (game->getBag()->size() == 0) {
+         std::cout << "Bag is empty. Please try again: " << std::endl;
+         std::cout << std::endl;
+         if (game->getPlayerCount() != 0){
+            game->getPlayer(game->getCurrentPlayerID())->setRepeatTurn(true);
+         }
+      }
+      else {
+         Player* player = game->getPlayer(game->getCurrentPlayerID());
+         int tileIndex = -1;
+         bool tileSanity = false;
+         while (!(tileSanity)) {
+            std::string errorMessage = "ERROR: ";
+            // IMPORT VARIABLES AS STRINGS
+            input = input.erase(0, input.find(DELIMITER) + DELIMITER.length());
+
+            // TILESTRING
+            std::string tileString = input.substr(0, input.find(DELIMITER));
+            // std::cout << "tileString: " << tileString << std::endl;
+            input = input.erase(0, input.find(DELIMITER) + DELIMITER.length());
+
+            // MATCH TILE INDEX AND GRAB TILE TO ADD TO BOARD
+            tileIndex = player->getHand()->getIndex(tileString);
+            if (0 <= tileIndex && tileIndex < HANDSIZE) {
+               tileSanity = true;
+            }
+            else {
+               errorMessage += "The specified tile does not exist in your hand. ";
+               errorMessage += "Please try again: ";
+               std::cout << errorMessage << std::endl;
+               getInput(input);
+            }
+         }
+         game->replaceTileInHand(tileIndex);
+      }
+   }
 
    // PLACE TILE
    else if (input.find("place") != std::string::npos && input.find("at") != std::string::npos) {
@@ -121,6 +160,13 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
 
          // WHILE INPUT IS NOT VALID
          while (!(tileSanity && rowSanity && colSanity)) {
+
+            // bool tileSanity = false; 
+            // bool rowSanity = false;
+            // bool colSanity = false;
+            // Might need this in the loop
+            // Couldn't someone put in a correct tile, updating tileSanity to true, fuck up elsewhere, and then use a different tile next round? The tileSanity will still be true, despite the tile input being invalid.
+            // Your next part of loop catches it anyway but I thought I'd mention it regardless. Delete this after you read it and take my suggestion if you want.
 
             // IMPORT VARIABLES AS STRINGS
             input = input.erase(0, input.find(DELIMITER) + DELIMITER.length());
