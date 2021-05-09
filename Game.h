@@ -54,7 +54,7 @@ public:
     // TILE FUNCTIONS
     void addTileToPlayerHand(int playerId);
     void placeTileOnBoard(int selectedTileIndex, int row, int col);
-    void replaceTileInHand(int selectedTileIndex);
+    void replaceTileInHand(int selectedTileIndex, int playerID);
     void addTilesToBag();
 
     // PRINT FUNCTIONS

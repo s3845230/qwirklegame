@@ -12,6 +12,7 @@ class TileBag {
         int size();
         void shuffle();
         Tile* popTile();
+        void addTile(Tile *data);
 
     private:
 

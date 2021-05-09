@@ -78,3 +78,8 @@ int TileBag::size()
 {
     return this->tiles->size();
 }
+
+void TileBag::addTile(Tile *data)
+{
+    tiles->add_back(data);
+}
