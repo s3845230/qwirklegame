@@ -146,9 +146,13 @@ void Game::placeTileOnBoard(int selectedTileIndex, int row, int col)
     // TODO
 }
 
-void Game::replaceTileInHand(int selectedTileIndex)
+void Game::replaceTileInHand(int selectedTileIndex, int playerId)
 {
-    // TODO
+    Tile* oldTile = new Tile(*this->getPlayer(playerId)->getHand()->get(selectedTileIndex));
+    this->getPlayer(playerId)->getHand()->remove(selectedTileIndex);    //take tile from hand
+    this->bag->addTile(oldTile);                                        //put tile in bag
+    this->bag->shuffle();                                               //shuffle bag
+    this->addTileToPlayerHand(playerId);                                //get new tile
 }
 
 void Game::saveGame(std::string filename)
