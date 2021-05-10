@@ -35,7 +35,7 @@ int main(void)
          makeSelection(input, game, gameRunning);
          // continue game play
          game->continueGamePlay(gameRunning);
-      }
+      } 
    }
    delete game;
 
@@ -95,9 +95,9 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
       // START GAME
       game->startGame();
    }
-   
+
    // REPLACE TILE
-   if (input.find("replace") != std::string::npos) {
+   else if (input.find("replace") != std::string::npos) {
       if (game->getBag()->size() == 0) {
          std::cout << "Bag is empty. Please try again: " << std::endl;
          std::cout << std::endl;
@@ -119,7 +119,7 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
             // std::cout << "tileString: " << tileString << std::endl;
             input = input.erase(0, input.find(DELIMITER) + DELIMITER.length());
 
-            // MATCH TILE INDEX AND GRAB TILE TO ADD TO BOARD
+            // MATCH TILE INDEX AND GRAB TILE TO REPLACE
             tileIndex = player->getHand()->getIndex(tileString);
             if (0 <= tileIndex && tileIndex < HANDSIZE) {
                tileSanity = true;
