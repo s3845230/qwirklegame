@@ -66,7 +66,7 @@ void Player::setHand(std::string handAsString)
 {
     // TODO
     // Comparison error with .length() and int
-    for (int i = 0; i < handAsString.length(); i += 3)
+    for (unsigned int i = 0; i < handAsString.length(); i += 3)
     {
         char colour = handAsString[i];
         int shape = stoi(handAsString.substr(i + 1));
