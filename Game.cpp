@@ -261,6 +261,8 @@ void Game::showGameOverMessage()
     std::cout << "Game over" << std::endl;
     int winnerIndex = -1;
     int highestScore = 0;
+    bool gameDraw = false;
+
     for (int i = 0; i < this->getPlayerCount(); i++)
     {
         std::cout << "Score for " << this->getPlayer(i)->getName() << ": " << this->getPlayer(i)->getScore() << std::endl;
@@ -269,9 +271,20 @@ void Game::showGameOverMessage()
             highestScore = this->getPlayer(i)->getScore();
             winnerIndex = i;
         }
+        else if (highestScore == this->getPlayer(i)->getScore())
+        {
+            gameDraw = true;
+        }
     }
 
-    std::cout << "Player " << this->getPlayer(winnerIndex)->getName() << " won!" << std::endl;
+    if (gameDraw)
+    {
+        std::cout << "Game draw!" << std::endl;
+    }
+    else
+    {
+        std::cout << "Player " << this->getPlayer(winnerIndex)->getName() << " won!" << std::endl;
+    }
 }
 
 void Game::switchPlayer()
