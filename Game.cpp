@@ -259,7 +259,7 @@ void Game::continueGamePlay(bool &gameRunning)
 void Game::showGameOverMessage()
 {
     std::cout << "Game over" << std::endl;
-    int winnerIndex;
+    int winnerIndex = -1;
     int highestScore = 0;
     for (int i = 0; i < this->getPlayerCount(); i++)
     {

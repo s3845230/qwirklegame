@@ -236,8 +236,10 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
                getInput(input);
             }
          }
-
-         if (game->getBoard()->scoreValidate(row, col, tile) > 0) {
+         if (game->getBag()->size() == 60) {
+            score++;
+         }
+         else if (game->getBoard()->scoreValidate(row, col, tile) > 0) {
             // game->placeTileOnBoard(tile, row, col);
             score = game->getBoard()->scoreValidate(row,col,tile);
          }
