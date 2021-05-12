@@ -104,6 +104,7 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
       getInput(filename);
       game->loadGame(filename);
    }
+   
    // REPLACE TILE
    else if (input.find("replace") != std::string::npos) {
       if (game->getBag()->size() == 0) {
@@ -148,7 +149,6 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
 
       // TODO:
       // increase input sanitisation for row&col to include incorrect types, not just incorrect values
-
       int score = 0;
       Player* player = game->getPlayer(game->getCurrentPlayerID());
 
@@ -158,7 +158,7 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
       int col = -1;
          
       // WHILE CURRENT PLAYER HASN'T MADE A VALID PLAY
-      while (score==0) {
+      while (score<=0) {
 
          // INPUT SANITSATION
          bool tileSanity = false;
@@ -169,12 +169,11 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
          // WHILE INPUT IS NOT VALID
          while (!(tileSanity && rowSanity && colSanity)) {
 
-            // bool tileSanity = false; 
-            // bool rowSanity = false;
-            // bool colSanity = false;
-            // Might need this in the loop
-            // Couldn't someone put in a correct tile, updating tileSanity to true, fuck up elsewhere, and then use a different tile next round? The tileSanity will still be true, despite the tile input being invalid.
-            // Your next part of loop catches it anyway but I thought I'd mention it regardless. Delete this after you read it and take my suggestion if you want.
+            // INPUT SANITSATION
+            tileSanity = false;
+            rowSanity = false;
+            colSanity = false;
+            errorMessage = "ERROR: ";
 
             // IMPORT VARIABLES AS STRINGS
             input = input.erase(0, input.find(DELIMITER) + DELIMITER.length());

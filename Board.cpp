@@ -1,6 +1,8 @@
 #include "Board.h"
 #include <iostream>
 
+#define ERROR 100
+
 Board::Board()
 {
     firstMoveTaken = false;
@@ -125,24 +127,30 @@ std::vector<std::vector<Tile *> > Board::getState() {
 
 int Board::scoreValidate(int row, int col, Tile *newTile) {
 
-    if (firstMoveTaken == false) {
-        return 1;
-    }
+    // if (firstMoveTaken == false) {
+    //     return 1;
+    // }
 
     // BUGS:
 
-    // std::cout << "row: " << row << "\tcol: " << col << "\tnewTile: " << newTile->colour << newTile->shape << std::endl;
+    // TODO:
+    // remove mid method return sat
+
+    std::cout << "row: " << row << "\tcol: " << col << "\tnewTile: " << newTile->colour << newTile->shape << std::endl;
+
+
+
+    // VARIABLE INITIALISATION
+    int score[4] = {0, 0, 0, 0};
+    // MODIFIERS TO ADD TO COORDINATES WHEN TRAVERSING
+    int directionTravel[8] = {1, 0, -1, 0, 0, 1, 0, -1};
+    char directionAttribute[2];
 
     // LOCATION VALIDATION
     if (!isLocationAvailable(row, col)) {
         // std::cout << "LOCATION NOT AVAIABLE" << std::endl;
-        return 0;
+        score[0] -= ERROR;
     }
-
-    // VARIABLE INITIALISATION
-    int score[4] = {0, 0, 0, 0};
-    int directionTravel[8] = {1, 0, -1, 0, 0, 1, 0, -1};
-    char directionAttribute[2];
 
     for (int i = 0; i < 4; i++) {
 
@@ -159,21 +167,24 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
 
             if (tile->colour == newTile->colour && tile->shape == newTile->shape) {
                 // std::cout << "SAME TILE AS NEIGHBOUR; INVALID" << std::endl;
-                return 0;
+                score[i] -= ERROR;
             }
             else if (tile->colour == newTile->colour) {
                 directionAttribute[direction] = COLOUR;
                 score[i]++;
-                // std::cout << "score[" << i << "]: " << score[i] << std::endl;
+                // std::cout << "next: \t\t" << char(nextRow+65) << ", " << nextCol << std::endl;
+                // std::cout << "score[" << i << "]: \t" << score[i] << std::endl;
+
             }
             else if (tile->shape == newTile->shape) {
                 directionAttribute[direction] = SHAPE;
                 score[i]++;
-                // std::cout << "score[" << i << "]: " << score[i] << std::endl;
+                // std::cout << "next: \t\t" << char(nextRow+65) << ", " << nextCol << std::endl;
+                // std::cout << "score[" << i << "]: \t" << score[i] << std::endl;
             }
             else {
                 // std::cout << "NEIGHBORMATCH else{}" << std::endl;
-                return 0;
+                score[i] -= ERROR;
             }
 
             // CHECKING TO SEE IF EACH SEQUENCE FOLLOWING THE NEIGHBOURS ARE VALID
@@ -181,43 +192,46 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
 
                 tile = this->state[nextRow][nextCol];
 
-                if ((directionAttribute[direction] == SHAPE) && (tile->shape == newTile->shape)) {
+                if (tile->colour == newTile->colour && tile->shape == newTile->shape) {
+                    // std::cout << "SAME TILE AS NEIGHBOUR; INVALID" << std::endl;
+                    score[i] -= ERROR;
+                    // return 0;
+                }
+                else if ((directionAttribute[direction] == SHAPE) && (tile->shape == newTile->shape)) {
                     score[i]++;
-                    // std::cout << "score[" << i << "]: " << score[i] << std::endl;
+                    // std::cout << "next: \t\t" << char(nextRow+65) << ", " << nextCol << std::endl;
+                    // std::cout << "score[" << i << "]: \t" << score[i] << std::endl;
                 }
                 else if ((directionAttribute[direction] == COLOUR) && (tile->colour == newTile->colour)) {
                     score[i]++;
-                    // std::cout << "score[" << i << "]: " << score[i] << std::endl;
+                    // std::cout << "next: \t\t" << char(nextRow+65) << ", " << nextCol << std::endl;
+                    // std::cout << "score[" << i << "]: \t" << score[i] << std::endl;
                 }
+
                 else {
                     // SEQUENCE CANNOT BE CONTINUED, 0 SCORE: NOT VALID
                     // std::cout << "SEQUENCE CANNOT BE CONTINUED; MISMATCH" << std::endl;
-                    return 0;
+                    score[i] -= ERROR;
                 }
 
                 nextRow += directionTravel[i];
                 nextCol += directionTravel[4 + i];
-            }
 
-            // CANNOT PLACE TILE IN A SEQUENCE LONGER THAN THE QWIRKLE LENGTH (MUST BE REPEATS)
-            if (((score[0] + score[2]) > QWIRKLE_LEN) || ((score[1] + score[3]) > QWIRKLE_LEN)) {
-                // std::cout << "SEQUENCE > QWIRKLE_LEN" << std::endl;
-                return 0;
             }
 
             // delete tile;
         }
     }
 
-    // ALL NEIGHBOURS ARE EMPTY (NOT VALID)
-    if (score[0] + score[1] + score[2] + score[3] == 0) {
-        // std::cout << "ALL NEIGHBOURS ARE EMPTY" << std::endl;
-        return 0;
-    }
 
-    // CHECK FOR QWIRKLES
-    for (int i = 0; i < 4; i++) {
-        if (score[i] == 6) {
+    // SCORE CORRECTION
+    for (int i = 0; i < 2; i++) {
+        // DON'T COUNT NEWTILE SCORE TWICE
+        if (score[i] + score[i+2] > 6) {
+            score[i]--;
+        }
+        // ADD 6 TO SCORE IF QWIRKLE
+        if (score[i] + score[i+2] == 6) {
             score[i] += 6;
         }
     }
