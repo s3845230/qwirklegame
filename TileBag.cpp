@@ -98,3 +98,8 @@ std::string TileBag::getBagAsString()
 
    return retValue;
 }
+
+void TileBag::clearBag()
+{
+    tiles->clear();
+}

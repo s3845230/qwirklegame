@@ -42,7 +42,16 @@ TileBag *Game::getBag()
 
 void Game::setBag(std::string bagAsString)
 {
-    // TODO
+    this->bag->clearBag();
+    for (unsigned int i = 0; i < bagAsString.length(); i += 3)
+    {
+        std::string tile = bagAsString.substr(i, 2);
+        char colour = tile[0];
+        int shape = stoi(tile.substr(1));
+
+        Tile *newTile = new Tile(colour, shape);
+        this->bag->addTile(newTile);
+    }
 }
 
 void Game::setCurrentPlayerID(int playerID)
@@ -67,7 +76,7 @@ Board *Game::getBoard()
 
 void Game::loadGame(std::string filename)
 {
-    if(this->fileExists(filename))
+    if (this->fileExists(filename))
     {
         std::ifstream file(filename);
         std::string line;
@@ -111,7 +120,7 @@ void Game::loadGameState(std::string fileArray[])
     // Set current player
     for (int i = 0; i < this->getPlayerCount(); i++)
     {
-        if(this->getPlayer(i)->getName().compare(fileArray[9]) == 0)
+        if (this->getPlayer(i)->getName().compare(fileArray[9]) == 0)
         {
             this->setCurrentPlayerID(i);
         }
@@ -181,31 +190,34 @@ void Game::distributeTilesToPlayers()
 
 void Game::addTileToPlayerHand(int playerID)
 {
-    this->getPlayer(playerID)->addTile(this->bag->popTile());
+    if (this->bag->size() > 0)
+    {
+        this->getPlayer(playerID)->addTile(this->bag->popTile());
+    }
 }
 
-void Game::placeTileOnBoard(Tile* tile, int row, int col)
+void Game::placeTileOnBoard(Tile *tile, int row, int col)
 {
     this->board->placeTile(tile, row, col);
 }
 
 void Game::replaceTileInHand(int selectedTileIndex)
 {
-    Tile* oldTile = new Tile(*this->getPlayer(this->getCurrentPlayerID())->getHand()->get(selectedTileIndex));
-    this->getPlayer(this->getCurrentPlayerID())->getHand()->remove(selectedTileIndex);      //take tile from hand
-    this->bag->addTile(oldTile);                                                            //put tile in bag
-    this->bag->shuffle();                                                                   //shuffle bag
-    this->addTileToPlayerHand(this->getCurrentPlayerID());                                  //get new tile
+    Tile *oldTile = new Tile(*this->getPlayer(this->getCurrentPlayerID())->getHand()->get(selectedTileIndex));
+    this->getPlayer(this->getCurrentPlayerID())->getHand()->remove(selectedTileIndex); //take tile from hand
+    this->bag->addTile(oldTile);                                                       //put tile in bag
+    this->bag->shuffle();                                                              //shuffle bag
+    this->addTileToPlayerHand(this->getCurrentPlayerID());                             //get new tile
 }
 
 void Game::saveGame(std::string filename)
 {
     std::ofstream outputFile(filename);
-    for(int i = 0; i < this->getPlayerCount(); i++)
+    for (int i = 0; i < this->getPlayerCount(); i++)
     {
         outputFile << this->getPlayer(i)->getName() << std::endl;
         outputFile << this->getPlayer(i)->getScore() << std::endl;
-        outputFile << this->getPlayer(i)->getHandAsString() << std::endl;   
+        outputFile << this->getPlayer(i)->getHandAsString() << std::endl;
     }
     outputFile << BOARD_DIM << "," << BOARD_DIM << std::endl;
     outputFile << this->getBoard()->getStateAsString() << std::endl;
@@ -213,9 +225,8 @@ void Game::saveGame(std::string filename)
     outputFile << this->getPlayer(this->getCurrentPlayerID())->getName() << std::endl;
 
     outputFile.close();
-    
+
     this->getPlayer(this->getCurrentPlayerID())->setRepeatTurn(true);
-    
 }
 
 bool Game::fileExists(std::string fileName)
@@ -234,10 +245,10 @@ void Game::continueGamePlay(bool &gameRunning)
             playerHandEmpty = true;
         }
     }
-    if (this->bag->size() == 0 && playerHandEmpty)
+    if (this->getBag()->size() == 0 && playerHandEmpty)
     {
-        // show game over message
-        //end game
+        this->showGameOverMessage();
+        this->endGame(gameRunning);
     }
     else
     {
@@ -247,7 +258,20 @@ void Game::continueGamePlay(bool &gameRunning)
 
 void Game::showGameOverMessage()
 {
-    // TODO
+    std::cout << "Game over" << std::endl;
+    int winnerIndex;
+    int highestScore = 0;
+    for (int i = 0; i < this->getPlayerCount(); i++)
+    {
+        std::cout << "Score for " << this->getPlayer(i)->getName() << ": " << this->getPlayer(i)->getScore() << std::endl;
+        if (highestScore < this->getPlayer(i)->getScore())
+        {
+            highestScore = this->getPlayer(i)->getScore();
+            winnerIndex = i;
+        }
+    }
+
+    std::cout << "Player " << this->getPlayer(winnerIndex)->getName() << " won!" << std::endl;
 }
 
 void Game::switchPlayer()
