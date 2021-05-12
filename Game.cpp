@@ -67,12 +67,55 @@ Board *Game::getBoard()
 
 void Game::loadGame(std::string filename)
 {
-    //TODO
+    if(this->fileExists(filename))
+    {
+        std::ifstream file(filename);
+        std::string line;
+        std::string fileArray[SAVE_FILE_LENGTH];
+        for (int i = 0; i < SAVE_FILE_LENGTH; i++)
+        {
+            std::getline(file, line);
+            fileArray[i] = line;
+        }
+
+        this->loadGameState(fileArray);
+        this->setBeingPlayed(true);
+
+        std::cout << "Qwirkle game successfully loaded" << std::endl;
+        std::cout << std::endl;
+    }
+    else
+    {
+        std::cout << "File does not exist" << std::endl;
+    }
 }
 
 void Game::loadGameState(std::string fileArray[])
 {
-    //TODO
+    this->board = new Board();
+
+    // Add player 1 content
+    this->addPlayer(fileArray[0]);
+    this->getPlayer(0)->setScore(stoi(fileArray[1]));
+    this->getPlayer(0)->setHand(fileArray[2]);
+    // Add player 2 content
+    this->addPlayer(fileArray[3]);
+    this->getPlayer(1)->setScore(stoi(fileArray[4]));
+    this->getPlayer(1)->setHand(fileArray[5]);
+    // Set BOARD_DIM
+    // this->getBoard()->showBoardDimension(fileArray[6]);
+    // Set Board
+    this->getBoard()->setBoard(fileArray[7]);
+    // Set bag
+    this->setBag(fileArray[8]);
+    // Set current player
+    for (int i = 0; i < this->getPlayerCount(); i++)
+    {
+        if(this->getPlayer(i)->getName().compare(fileArray[9]) == 0)
+        {
+            this->setCurrentPlayerID(i);
+        }
+    }
 }
 
 void Game::showCredits()
@@ -157,7 +200,22 @@ void Game::replaceTileInHand(int selectedTileIndex)
 
 void Game::saveGame(std::string filename)
 {
-    // TODO
+    std::ofstream outputFile(filename);
+    for(int i = 0; i < this->getPlayerCount(); i++)
+    {
+        outputFile << this->getPlayer(i)->getName() << std::endl;
+        outputFile << this->getPlayer(i)->getScore() << std::endl;
+        outputFile << this->getPlayer(i)->getHandAsString() << std::endl;   
+    }
+    outputFile << BOARD_DIM << "," << BOARD_DIM << std::endl;
+    outputFile << this->getBoard()->getStateAsString() << std::endl;
+    outputFile << this->getBag()->getBagAsString() << std::endl;
+    outputFile << this->getPlayer(this->getCurrentPlayerID())->getName() << std::endl;
+
+    outputFile.close();
+    
+    this->getPlayer(this->getCurrentPlayerID())->setRepeatTurn(true);
+    
 }
 
 bool Game::fileExists(std::string fileName)

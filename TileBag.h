@@ -13,6 +13,7 @@ class TileBag {
         void shuffle();
         Tile* popTile();
         void addTile(Tile *data);
+        std::string getBagAsString();
 
     private:
 

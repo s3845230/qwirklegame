@@ -62,6 +62,19 @@ void Player::showHand()
     }
     std::cout << std::endl;
 }
+void Player::setHand(std::string handAsString)
+{
+    // TODO
+    // Comparison error with .length() and int
+    for (unsigned int i = 0; i < handAsString.length(); i += 3)
+    {
+        char colour = handAsString[i];
+        int shape = stoi(handAsString.substr(i + 1));
+
+        Tile *newTile = new Tile(colour, shape);
+        this->addTile(newTile);
+    }
+}
 std::string Player::getHandAsString()
 {
     return this->hand->getContentAsString();
