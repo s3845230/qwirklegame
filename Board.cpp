@@ -127,19 +127,6 @@ std::vector<std::vector<Tile *> > Board::getState() {
 
 int Board::scoreValidate(int row, int col, Tile *newTile) {
 
-    // if (firstMoveTaken == false) {
-    //     return 1;
-    // }
-
-    // BUGS:
-
-    // TODO:
-    // remove mid method return sat
-
-    std::cout << "row: " << row << "\tcol: " << col << "\tnewTile: " << newTile->colour << newTile->shape << std::endl;
-
-
-
     // VARIABLE INITIALISATION
     int score[4] = {0, 0, 0, 0};
     // MODIFIERS TO ADD TO COORDINATES WHEN TRAVERSING
@@ -148,7 +135,6 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
 
     // LOCATION VALIDATION
     if (!isLocationAvailable(row, col)) {
-        // std::cout << "LOCATION NOT AVAIABLE" << std::endl;
         score[0] -= ERROR;
     }
 
@@ -161,68 +147,58 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
         int direction = i % 2;
         Tile *tile;
 
-        if (!isLocationAvailable(nextRow, nextCol)) {
-            // CHECKING TO SEE IF FOUR IMMEDIATE NEIGHBOURS ARE VALID
-            tile = this->state[nextRow][nextCol];
 
-            if (tile->colour == newTile->colour && tile->shape == newTile->shape) {
-                // std::cout << "SAME TILE AS NEIGHBOUR; INVALID" << std::endl;
-                score[i] -= ERROR;
-            }
-            else if (tile->colour == newTile->colour) {
-                directionAttribute[direction] = COLOUR;
-                score[i]++;
-                // std::cout << "next: \t\t" << char(nextRow+65) << ", " << nextCol << std::endl;
-                // std::cout << "score[" << i << "]: \t" << score[i] << std::endl;
-
-            }
-            else if (tile->shape == newTile->shape) {
-                directionAttribute[direction] = SHAPE;
-                score[i]++;
-                // std::cout << "next: \t\t" << char(nextRow+65) << ", " << nextCol << std::endl;
-                // std::cout << "score[" << i << "]: \t" << score[i] << std::endl;
-            }
-            else {
-                // std::cout << "NEIGHBORMATCH else{}" << std::endl;
-                score[i] -= ERROR;
-            }
-
-            // CHECKING TO SEE IF EACH SEQUENCE FOLLOWING THE NEIGHBOURS ARE VALID
-            while (!isLocationAvailable(nextRow, nextCol)) {
-
+        if (isDirectionValid(nextRow, nextCol)) {
+            if (!isLocationAvailable(nextRow, nextCol)) {
+                // CHECKING TO SEE IF FOUR IMMEDIATE NEIGHBOURS ARE VALID
                 tile = this->state[nextRow][nextCol];
 
                 if (tile->colour == newTile->colour && tile->shape == newTile->shape) {
-                    // std::cout << "SAME TILE AS NEIGHBOUR; INVALID" << std::endl;
+                    // SAME TILE AS NEIGHBOUR; INVALID
                     score[i] -= ERROR;
-                    // return 0;
                 }
-                else if ((directionAttribute[direction] == SHAPE) && (tile->shape == newTile->shape)) {
+                else if (tile->colour == newTile->colour) {
+                    directionAttribute[direction] = COLOUR;
                     score[i]++;
-                    // std::cout << "next: \t\t" << char(nextRow+65) << ", " << nextCol << std::endl;
-                    // std::cout << "score[" << i << "]: \t" << score[i] << std::endl;
-                }
-                else if ((directionAttribute[direction] == COLOUR) && (tile->colour == newTile->colour)) {
-                    score[i]++;
-                    // std::cout << "next: \t\t" << char(nextRow+65) << ", " << nextCol << std::endl;
-                    // std::cout << "score[" << i << "]: \t" << score[i] << std::endl;
-                }
 
+                }
+                else if (tile->shape == newTile->shape) {
+                    directionAttribute[direction] = SHAPE;
+                    score[i]++;
+                }
                 else {
-                    // SEQUENCE CANNOT BE CONTINUED, 0 SCORE: NOT VALID
-                    // std::cout << "SEQUENCE CANNOT BE CONTINUED; MISMATCH" << std::endl;
                     score[i] -= ERROR;
                 }
 
-                nextRow += directionTravel[i];
-                nextCol += directionTravel[4 + i];
+                // CHECKING TO SEE IF EACH SEQUENCE FOLLOWING THE NEIGHBOURS ARE VALID
+                while (!isLocationAvailable(nextRow, nextCol) && (isDirectionValid(nextRow, nextCol))) {
 
+                    tile = this->state[nextRow][nextCol];
+
+                    if (tile->colour == newTile->colour && tile->shape == newTile->shape) {
+                        // SAME TILE EXISTS IN SEQUENCE; INVALID
+                        score[i] -= ERROR;
+                    }
+                    else if ((directionAttribute[direction] == SHAPE) && (tile->shape == newTile->shape)) {
+                        score[i]++;
+                    }
+                    else if ((directionAttribute[direction] == COLOUR) && (tile->colour == newTile->colour)) {
+                        score[i]++;
+                    }
+
+                    else {
+                        // SEQUENCE CANNOT BE CONTINUED
+                        score[i] -= ERROR;
+                    }
+
+                    nextRow += directionTravel[i];
+                    nextCol += directionTravel[4 + i];
+
+                }
             }
-
-            // delete tile;
         }
     }
-
+        
 
     // SCORE CORRECTION
     for (int i = 0; i < 2; i++) {
@@ -237,4 +213,14 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
     }
 
     return score[0] + score[1] + score[2] + score[3];
+}
+
+bool Board::isDirectionValid(int row, int col) {
+    bool retValue = false;
+
+    if ((row >= 0 && row < 26) && (col >= 0 && col < 26)) {
+        retValue = true;
+    }
+
+    return retValue;
 }

@@ -29,6 +29,8 @@ public:
     std::string getStateAsString();
     void setBoard(std::string boardAsString);
 
+    bool isDirectionValid(int row, int col);
+
 private:
     std::vector<std::vector<Tile *> > state;
 
