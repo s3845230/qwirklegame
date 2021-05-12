@@ -5,8 +5,6 @@
 
 Board::Board()
 {
-    firstMoveTaken = false;
-
     this->state.resize(BOARD_DIM);
     for (int i = 0; i < BOARD_DIM; i++)
     {

@@ -14,9 +14,6 @@ class Board
 public:
     Board();
     ~Board();
-    
-    // LET FIRST MOVE BE ANY PLAY
-    bool firstMoveTaken;
 
     void placeTile(Tile* tile, int row, int col);
     Tile *getTile(int row, int col);

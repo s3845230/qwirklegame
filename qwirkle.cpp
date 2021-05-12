@@ -259,7 +259,6 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
 
       // PLACE TILE ON BOARD
       game->placeTileOnBoard(tile, row, col);
-      game->getBoard()->firstMoveTaken = true;
 
       // ADJUST PLAYER SCORE + HAND
       player->addScore(score);
