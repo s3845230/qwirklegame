@@ -28,6 +28,7 @@ public:
     void showBoard();
     std::string getStateAsString();
     void setBoard(std::string boardAsString);
+    int getNumOfTilesOnBoard();
 
 private:
     std::vector<std::vector<Tile *> > state;
