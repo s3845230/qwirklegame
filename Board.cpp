@@ -224,3 +224,20 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
 
     return score[0] + score[1] + score[2] + score[3];
 }
+
+int Board::getNumOfTilesOnBoard()
+{
+    int retVal = 0;
+
+    for (int i = 0; i < BOARD_DIM; i++)
+    {
+        for (int j = 0; j < BOARD_DIM; j++)
+        {
+            if(isLocationAvailable(i, j))
+            {
+                retVal += 1;
+            }
+        } 
+    }
+    return retVal;    
+}
