@@ -213,6 +213,9 @@ void Game::saveGame(std::string filename)
     outputFile << this->getPlayer(this->getCurrentPlayerID())->getName() << std::endl;
 
     outputFile.close();
+    
+    this->getPlayer(this->getCurrentPlayerID())->setRepeatTurn(true);
+    
 }
 
 bool Game::fileExists(std::string fileName)
