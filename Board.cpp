@@ -223,4 +223,22 @@ bool Board::isDirectionValid(int row, int col) {
     }
 
     return retValue;
+
+}
+
+int Board::getNumOfTilesOnBoard()
+{
+    int retVal = 0;
+
+    for (int i = 0; i < BOARD_DIM; i++)
+    {
+        for (int j = 0; j < BOARD_DIM; j++)
+        {
+            if(isLocationAvailable(i, j))
+            {
+                retVal += 1;
+            }
+        } 
+    }
+    return retVal;    
 }

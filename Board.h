@@ -28,6 +28,7 @@ public:
     void showBoard();
     std::string getStateAsString();
     void setBoard(std::string boardAsString);
+    int getNumOfTilesOnBoard();
 
     bool isDirectionValid(int row, int col);
 
