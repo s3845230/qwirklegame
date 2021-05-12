@@ -210,6 +210,9 @@ void Game::saveGame(std::string filename)
     outputFile << BOARD_DIM << "," << BOARD_DIM << std::endl;
     outputFile << this->getBoard()->getStateAsString() << std::endl;
     outputFile << this->getBag()->getBagAsString() << std::endl;
+    outputFile << this->getPlayer(this->getCurrentPlayerID())->getName() << std::endl;
+
+    outputFile.close();
 }
 
 bool Game::fileExists(std::string fileName)
