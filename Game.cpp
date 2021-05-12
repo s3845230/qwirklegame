@@ -190,7 +190,10 @@ void Game::distributeTilesToPlayers()
 
 void Game::addTileToPlayerHand(int playerID)
 {
-    this->getPlayer(playerID)->addTile(this->bag->popTile());
+    if (this->bag->size() > 0)
+    {
+        this->getPlayer(playerID)->addTile(this->bag->popTile());
+    }
 }
 
 void Game::placeTileOnBoard(Tile *tile, int row, int col)
@@ -256,7 +259,7 @@ void Game::continueGamePlay(bool &gameRunning)
 void Game::showGameOverMessage()
 {
     std::cout << "Game over" << std::endl;
-    int winnerIndex;
+    int winnerIndex = -1;
     int highestScore = 0;
     for (int i = 0; i < this->getPlayerCount(); i++)
     {
