@@ -188,25 +188,8 @@ int LinkedList::getIndex(std::string tileString) {
    for (int i = 0; i < this->size(); i++) {
       if (this->get(i)->fullName.compare(tileString) == 0) {
          index = i;
-      }
+      }popNode
    }
 
    return index;
 }
-
-// Tile *LinkedList::popNode()
-// {
-//    if (head->next != nullptr)
-//    {
-//       Node *current = head;
-//       while (current->next->next != nullptr)
-//       {
-//          current = current->next;
-//       }
-//       Tile *temp = new Tile(*(current->next->tile));
-//       delete current->next;
-//       current->next = nullptr;
-//       return temp;
-//    }
-//    throw std::invalid_argument("no nodes available to pop");
-// }

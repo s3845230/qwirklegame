@@ -125,9 +125,11 @@ std::vector<std::vector<Tile *> > Board::getState() {
 int Board::scoreValidate(int row, int col, Tile *newTile) {
 
     // VARIABLE INITIALISATION
+    // ARRAY TO STORE THE SCORES ADDED UP IN EACH DIRECTION
     int score[4] = {0, 0, 0, 0};
     // MODIFIERS TO ADD TO COORDINATES WHEN TRAVERSING
     int directionTravel[8] = {1, 0, -1, 0, 0, 1, 0, -1};
+    // ARRAY TO STORE THE ATTRIBUTE MATCHING THE SEQUENCE IN EACH DIRECTION
     char directionAttribute[2];
 
     // LOCATION VALIDATION
@@ -141,13 +143,14 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
         int nextRow = row + directionTravel[i];
         int nextCol = col + directionTravel[4 + i];
 
+        // SET DIRECTION TO 0 (VERTICAL) OR 1 (HORIZONTAL)
         int direction = i % 2;
         Tile *tile;
 
 
         if (isDirectionValid(nextRow, nextCol)) {
+            // CHECKING TO SEE IF FOUR IMMEDIATE NEIGHBOURS ARE VALID
             if (!isLocationAvailable(nextRow, nextCol)) {
-                // CHECKING TO SEE IF FOUR IMMEDIATE NEIGHBOURS ARE VALID
                 tile = this->state[nextRow][nextCol];
 
                 if (tile->colour == newTile->colour && tile->shape == newTile->shape) {
@@ -164,6 +167,7 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
                     score[i]++;
                 }
                 else {
+                    // TILE DOESN'T MATCH; INVALID
                     score[i] -= ERROR_SUBTRACT;
                 }
 
@@ -182,9 +186,8 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
                     else if ((directionAttribute[direction] == COLOUR) && (tile->colour == newTile->colour)) {
                         score[i]++;
                     }
-
                     else {
-                        // SEQUENCE CANNOT BE CONTINUED
+                        // TILE DOESN'T MATCH; INVALID
                         score[i] -= ERROR_SUBTRACT;
                     }
 
@@ -224,19 +227,16 @@ bool Board::isDirectionValid(int row, int col) {
 
 }
 
-int Board::getNumOfTilesOnBoard()
-{
+int Board::getNumOfTilesOnBoard() {
     int retVal = 0;
 
-    for (int i = 0; i < BOARD_DIM; i++)
-    {
-        for (int j = 0; j < BOARD_DIM; j++)
-        {
-            if(isLocationAvailable(i, j))
-            {
+    for (int i = 0; i < BOARD_DIM; i++) {
+        for (int j = 0; j < BOARD_DIM; j++) {
+            if(isLocationAvailable(i, j)) {
                 retVal += 1;
             }
         } 
     }
+    
     return retVal;    
 }

@@ -15,7 +15,8 @@ public:
 
    Tile *get(int index);
 
-   int getIndex(std::string tileString); // returns index of Tile pointer
+   // RETURNS INDEX OF TILE POINTER
+   int getIndex(std::string tileString);
 
    std::string getContentAsString();
    void add_front(Tile *data);
@@ -28,7 +29,6 @@ public:
    void remove(int index);
 
    void clear();
-   Tile *popNode();
 
 private:
    Node *head;
