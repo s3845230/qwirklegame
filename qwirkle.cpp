@@ -259,7 +259,8 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
       // ADJUST PLAYER SCORE + HAND
       player->addScore(score);
       player->getHand()->remove(tileIndex);
-      player->addTile(game->getBag()->popTile());
+      game->addTileToPlayerHand(game->getCurrentPlayerID());
+      // player->addTile(game->getBag()->popTile());
    }
 
    // LOAD GAME
