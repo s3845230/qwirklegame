@@ -14,6 +14,7 @@ class TileBag {
         Tile* popTile();
         void addTile(Tile *data);
         std::string getBagAsString();
+        void clearBag();
 
     private:
 

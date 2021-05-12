@@ -42,7 +42,16 @@ TileBag *Game::getBag()
 
 void Game::setBag(std::string bagAsString)
 {
-    // TODO
+    this->bag->clearBag();
+    for (unsigned int i = 0; i < bagAsString.length(); i += 3)
+    {
+        std::string tile = bagAsString.substr(i, 2);
+        char colour = tile[0];
+        int shape = stoi(tile.substr(1));
+
+        Tile *newTile = new Tile(colour, shape);
+        this->bag->addTile(newTile);
+    }
 }
 
 void Game::setCurrentPlayerID(int playerID)
