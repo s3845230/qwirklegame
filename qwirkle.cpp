@@ -253,6 +253,10 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
 
       }
 
+      if (score >=12) {
+         std::cout << "QWIRKLE!!!" << std::endl;
+      }
+
       // PLACE TILE ON BOARD
       game->placeTileOnBoard(tile, row, col);
       game->getBoard()->firstMoveTaken = true;
