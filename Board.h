@@ -9,6 +9,9 @@
 #define COLOUR 'C'
 #define SHAPE 'S'
 
+// NUMBER TO SUBTRACT FROM SCORE TO ENSURE SCORE !>0
+#define ERROR_SUBTRACT 100
+
 class Board
 {
 public:

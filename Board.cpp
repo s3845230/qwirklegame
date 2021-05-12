@@ -1,7 +1,6 @@
 #include "Board.h"
 #include <iostream>
 
-#define ERROR 100
 
 Board::Board()
 {
@@ -133,7 +132,7 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
 
     // LOCATION VALIDATION
     if (!isLocationAvailable(row, col)) {
-        score[0] -= ERROR;
+        score[0] -= ERROR_SUBTRACT;
     }
 
     for (int i = 0; i < 4; i++) {
@@ -153,7 +152,7 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
 
                 if (tile->colour == newTile->colour && tile->shape == newTile->shape) {
                     // SAME TILE AS NEIGHBOUR; INVALID
-                    score[i] -= ERROR;
+                    score[i] -= ERROR_SUBTRACT;
                 }
                 else if (tile->colour == newTile->colour) {
                     directionAttribute[direction] = COLOUR;
@@ -165,7 +164,7 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
                     score[i]++;
                 }
                 else {
-                    score[i] -= ERROR;
+                    score[i] -= ERROR_SUBTRACT;
                 }
 
                 // CHECKING TO SEE IF EACH SEQUENCE FOLLOWING THE NEIGHBOURS ARE VALID
@@ -175,7 +174,7 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
 
                     if (tile->colour == newTile->colour && tile->shape == newTile->shape) {
                         // SAME TILE EXISTS IN SEQUENCE; INVALID
-                        score[i] -= ERROR;
+                        score[i] -= ERROR_SUBTRACT;
                     }
                     else if ((directionAttribute[direction] == SHAPE) && (tile->shape == newTile->shape)) {
                         score[i]++;
@@ -186,7 +185,7 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
 
                     else {
                         // SEQUENCE CANNOT BE CONTINUED
-                        score[i] -= ERROR;
+                        score[i] -= ERROR_SUBTRACT;
                     }
 
                     nextRow += directionTravel[i];
@@ -210,6 +209,7 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
         }
     }
 
+    // RETURN TOTAL SCORE FOR ALL DIRECTIONS
     return score[0] + score[1] + score[2] + score[3];
 }
 
