@@ -1,5 +1,6 @@
 #include "Board.h"
 #include <iostream>
+#include <vector>
 
 
 Board::Board()
@@ -131,6 +132,9 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
     int directionTravel[8] = {1, 0, -1, 0, 0, 1, 0, -1};
     // ARRAY TO STORE THE ATTRIBUTE MATCHING THE SEQUENCE IN EACH DIRECTION
     char directionAttribute[2];
+    std::vector<std::string> horizontalTiles;
+    std::vector<std::string> verticalTiles;
+    std::vector<std::string>* currentVector;
 
     // LOCATION VALIDATION
     if (!isLocationAvailable(row, col)) {
@@ -147,6 +151,14 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
         int direction = i % 2;
         Tile *tile;
 
+        // SET POINTER TO HORIZONTAL/VERTICAL VECTOR
+        if (direction == 0) {
+            currentVector = &verticalTiles;
+        }
+        if (direction == 1) {
+            currentVector = &horizontalTiles;
+        }
+
 
         if (isDirectionValid(nextRow, nextCol)) {
             // CHECKING TO SEE IF FOUR IMMEDIATE NEIGHBOURS ARE VALID
@@ -160,7 +172,6 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
                 else if (tile->colour == newTile->colour) {
                     directionAttribute[direction] = COLOUR;
                     score[i]++;
-
                 }
                 else if (tile->shape == newTile->shape) {
                     directionAttribute[direction] = SHAPE;
@@ -182,9 +193,11 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
                     }
                     else if ((directionAttribute[direction] == SHAPE) && (tile->shape == newTile->shape)) {
                         score[i]++;
+                        currentVector->push_back(tile->fullName);
                     }
                     else if ((directionAttribute[direction] == COLOUR) && (tile->colour == newTile->colour)) {
                         score[i]++;
+                        currentVector->push_back(tile->fullName);
                     }
                     else {
                         // TILE DOESN'T MATCH; INVALID
@@ -198,12 +211,37 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
             }
         }
     }
-        
 
+
+    // for (size_t i = 0; i < horizontalTiles.size(); i++) {
+    //     std::cout << "horizontalTiles:" << horizontalTiles[i] << std::endl;
+    // }
+    // for (size_t i = 0; i < verticalTiles.size(); i++) {
+    //     std::cout << "verticalTiles:" << verticalTiles[i] << std::endl;
+    // }
+    for (size_t i = 0; i < horizontalTiles.size(); i++) {
+        for (size_t j = i+1; j < horizontalTiles.size(); j++) {
+            if (horizontalTiles[i] == horizontalTiles[j] && horizontalTiles[i] == horizontalTiles[j]) {
+                score[0] -= ERROR_SUBTRACT;
+                // std::cout << "erroringhere" << std::endl;
+            }
+        }
+    }
+    for (size_t i = 0; i < verticalTiles.size(); i++) {
+        for (size_t j = i+1; j < verticalTiles.size(); j++) {
+            if (verticalTiles[i] == verticalTiles[j] && verticalTiles[i] == verticalTiles[j]) {
+                score[0] -= ERROR_SUBTRACT;
+                // std::cout << "erroringhere" << std::endl;
+            }
+        }
+    }
+    // for (int i = 0; i < 4; i++) {
+    //     std::cout << "Score " << i << ": " << score[i] << std::endl;
+    // }
     // SCORE CORRECTION
     for (int i = 0; i < 2; i++) {
         // DON'T COUNT NEWTILE SCORE TWICE
-        if (score[i] + score[i+2] > 6) {
+        if (score[i] > 0 && score[i+2] > 0) {
             score[i]--;
         }
         // ADD 6 TO SCORE IF QWIRKLE

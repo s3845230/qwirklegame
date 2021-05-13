@@ -106,7 +106,7 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
    }
    
    // REPLACE TILE
-   else if (input.find("replace") != std::string::npos) {
+   else if (input.find("replace") != std::string::npos && input.size() == 10) {
       if (game->getBag()->size() == 0) {
          std::cout << "Bag is empty. Please try again: " << std::endl;
          std::cout << std::endl;
@@ -145,7 +145,7 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
    }
 
    // PLACE TILE
-   else if (input.find("place") != std::string::npos && input.find("at") != std::string::npos) {
+   else if (input.find("place") != std::string::npos && input.find("at") != std::string::npos && input.size() == 14) {
 
       // TODO:
       // increase input sanitisation for row&col to include incorrect types, not just incorrect values
