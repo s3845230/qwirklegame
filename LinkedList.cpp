@@ -188,7 +188,7 @@ int LinkedList::getIndex(std::string tileString) {
    for (int i = 0; i < this->size(); i++) {
       if (this->get(i)->fullName.compare(tileString) == 0) {
          index = i;
-      }popNode
+      }
    }
 
    return index;
