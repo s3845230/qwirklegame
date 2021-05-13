@@ -70,7 +70,7 @@ void getInput(std::string &input)
 void makeSelection(std::string input, Game *&game, bool &gameRunning)
 {
    // NEW GAME
-   if (input.compare("1") == 0 && !game->isBeingPlayed() && input.size() == 1)
+   if (input.compare("1") == 0 && !game->isBeingPlayed())
    {
       std::string tempName;
       std::cout << "Starting a New Game" << std::endl << std::endl;;
