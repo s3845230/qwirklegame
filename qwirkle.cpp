@@ -16,6 +16,7 @@
 void welcomeMessage();
 void showMenu();
 void getInput(std::string &input);
+// void validateName(std::string name);
 void makeSelection(std::string, Game *&game, bool &gameRunning);
 
 int main(void)
@@ -39,8 +40,8 @@ int main(void)
          game->continueGamePlay(gameRunning);
       } 
    }
-   delete game;
 
+   delete game;
    return EXIT_SUCCESS;
 }
 
@@ -69,25 +70,45 @@ void getInput(std::string &input)
    std::cout << std::endl;
 }
 
+void validateName(std::string &input) {
+   bool valid = false;
+   while (!valid) {
+      for (int i = 0; i < int(input.length()); i++) {
+         if (!isalpha(input[i])) {
+            std::cout << "The name you've input is not valid, please try again: " << std::endl;
+            getInput(input);
+            validateName(input);
+         }
+         input[i] = toupper(input[i]);
+      }
+      valid = true;
+
+   }
+}
+
 void makeSelection(std::string input, Game *&game, bool &gameRunning)
 {
    // NEW GAME
    if (input.compare("1") == 0 && !game->isBeingPlayed())
    {
-      std::string tempName;
+      std::string inputName;
       std::cout << "Starting a New Game" << std::endl << std::endl;;
       std::cout << std::endl;
 
       // PLAYER 1 NAME INPUT
       std::cout << "Enter a name for player 1 (uppercase characters only)" << std::endl;
-      getInput(tempName);
-      game->addPlayer(tempName);
+      getInput(inputName);
+      validateName(inputName);
+      
+      game->addPlayer(inputName);
       std::cout << std::endl;
 
       // PLAYER 2 NAME INPUT
       std::cout << "Enter a name for player 2 (uppercase characters only)" << std::endl;
-      getInput(tempName);
-      game->addPlayer(tempName);
+      getInput(inputName);
+      validateName(inputName);
+
+      game->addPlayer(inputName);
       std::cout << std::endl;
 
       // WELCOME MESSAGE
@@ -322,3 +343,4 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
       }
    }
 }
+
