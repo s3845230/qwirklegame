@@ -228,7 +228,7 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
             }
         }
     }
-    
+
     for (size_t i = 0; i < verticalTiles.size(); i++) {
         for (size_t j = i+1; j < verticalTiles.size(); j++) {
             if (verticalTiles[i] == verticalTiles[j] && verticalTiles[i] == verticalTiles[j]) {
@@ -240,6 +240,7 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
     // for (int i = 0; i < 4; i++) {
     //     std::cout << "Score " << i << ": " << score[i] << std::endl;
     // }
+
     // SCORE CORRECTION
     for (int i = 0; i < 2; i++) {
         // DON'T COUNT NEWTILE SCORE TWICE
