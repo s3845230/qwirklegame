@@ -133,6 +133,7 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
     // ARRAY TO STORE THE ATTRIBUTE MATCHING THE SEQUENCE IN EACH DIRECTION
     char directionAttribute[2];
     
+    // VECTORS TO HOLD THE VERTICAL AND HORIZONTAL TILE SEQUENCES AROUND THE TARGET LOCATION
     std::vector<std::string> horizontalTiles;
     std::vector<std::string> verticalTiles;
     std::vector<std::string>* currentVector;
@@ -198,10 +199,14 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
                     }
                     else if ((directionAttribute[direction] == SHAPE) && (tile->shape == newTile->shape)) {
                         score[i]++;
+
+                        // ADD THE TILE TO THE VERTICAL/HORIZONTAL SEQUENCE
                         currentVector->push_back(tile->fullName);
                     }
                     else if ((directionAttribute[direction] == COLOUR) && (tile->colour == newTile->colour)) {
                         score[i]++;
+
+                        // ADD THE TILE TO THE VERTICAL/HORIZONTAL SEQUENCE
                         currentVector->push_back(tile->fullName);
                     }
                     else {
@@ -217,28 +222,20 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
             }
         }
     }
-
-
-    // for (size_t i = 0; i < horizontalTiles.size(); i++) {
-    //     std::cout << "horizontalTiles:" << horizontalTiles[i] << std::endl;
-    // }
-    // for (size_t i = 0; i < verticalTiles.size(); i++) {
-    //     std::cout << "verticalTiles:" << verticalTiles[i] << std::endl;
-    // }
+    
+    // ITERATE THROUGH ALL TILES IN THE HORIZONTAL AND VERTICAL SEQUENCE AND CHECK THAT ALL TILES IN EACH SEQUENCE ARE UNIQUE
     for (size_t i = 0; i < horizontalTiles.size(); i++) {
         for (size_t j = i+1; j < horizontalTiles.size(); j++) {
-            if (horizontalTiles[i] == horizontalTiles[j] && horizontalTiles[i] == horizontalTiles[j]) {
+            if (horizontalTiles[i] == horizontalTiles[j]) {
                 score[0] -= ERROR_SUBTRACT;
-                std::cout << "horizontalTiles FAIL" << std::endl;
             }
         }
     }
 
     for (size_t i = 0; i < verticalTiles.size(); i++) {
         for (size_t j = i+1; j < verticalTiles.size(); j++) {
-            if (verticalTiles[i] == verticalTiles[j] && verticalTiles[i] == verticalTiles[j]) {
+            if (verticalTiles[i] == verticalTiles[j]) {
                 score[0] -= ERROR_SUBTRACT;
-                std::cout << "verticalTiles FAIL" << std::endl;
             }
         }
     }
