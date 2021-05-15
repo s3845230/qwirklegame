@@ -6,11 +6,12 @@
 #include "TileBag.h"
 #include "Board.h"
 
-#define EXIT_SUCCESS 0
-#define DELIMITER    std::string(" ")
-#define CHARINTVAL   65
-#define HANDSIZE     6
-#define BOARD_DIM    26
+#define EXIT_SUCCESS    0
+#define DELIMITER       std::string(" ")
+#define CHARINTVAL      65
+#define HANDSIZE        6
+#define BOARD_DIM       26
+#define TURNONEBAGSIZE  60
 
 void welcomeMessage();
 void showMenu();
@@ -222,37 +223,39 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
             errorMessage += "Please try again: ";
             std::cout << errorMessage << std::endl;
             std::cout << std::endl;
-            if (game->getPlayerCount() != 0)
-            {
+
+            if (game->getPlayerCount() != 0) {
                game->getPlayer(game->getCurrentPlayerID())->setRepeatTurn(true);
             }
          }
-         else if (game->getBag()->size() == 60) {
+
+         // LET PLAYER PLACE TILE ON TURN ONE, DON'T VALIDATE (score = 1)
+         else if (game->getBag()->size() == TURNONEBAGSIZE) {
             score++;
          }
+         // IF NOT TURN ONE, SCORE + VALIDATE TILE PLACEMENT
          else if (game->getBoard()->scoreValidate(row, col, tile) > 0) {
             // game->placeTileOnBoard(tile, row, col);
             score = game->getBoard()->scoreValidate(row,col,tile);
          }
+         // TILE PLACEMENT NOT VALID
          else {
-            // EXPECT PLAYER TO PLACE NEW TILE
             std::cout << "The specified location is not valid, please try again: " << std::endl;
-            // std::cout << "score: " << score << std::endl;
             std::cout << std::endl;
-            if (game->getPlayerCount() != 0)
-            {
+            if (game->getPlayerCount() != 0) {
                game->getPlayer(game->getCurrentPlayerID())->setRepeatTurn(true);
             }
 
          }
+         // IF VALID, PLACE TILE
          if (score > 0) {
-
-            // PRINT IF QWIRKLE
-            if (score >=12 && score < 24) {
+            // PCHECK FOR QWIRKLE
+            if (score >= 12 && score < 24) {
                std::cout << "QWIRKLE!!!" << std::endl;
             }
-            else if (score >=24) {
-               std::cout <<"DOUBLEQWIRKLE!!!" << std::endl;
+            // DOUBLE QWIRKLE
+            else if (score >= 24) {
+               std::cout << "DOUBLEQWIRKLE!!!" << std::endl;
             }
 
             // PLACE TILE ON BOARD
@@ -265,11 +268,11 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
             // player->addTile(game->getBag()->popTile());
          }
       }
+      // INVALID INPUT
       else {
          std::cout << "Invalid input" << std::endl;
          std::cout << std::endl;
-         if (game->getPlayerCount() != 0)
-         {
+         if (game->getPlayerCount() != 0) {
             game->getPlayer(game->getCurrentPlayerID())->setRepeatTurn(true);
          }
       }

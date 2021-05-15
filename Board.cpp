@@ -57,13 +57,13 @@ void Board::showBoard() {
 
 bool Board::isLocationAvailable(int row, int col) {
 
-    bool retValue = false;
+    bool returnValue = false;
 
     if (this->state[row][col] == nullptr) {
-        retValue = true;
+        returnValue = true;
     }
 
-    return retValue;
+    return returnValue;
 }
 
 void Board::placeTile(Tile* tile, int row, int col) {
@@ -263,26 +263,26 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
 }
 
 bool Board::isDirectionValid(int row, int col) {
-    bool retValue = false;
+    bool returnValue = false;
 
     if ((row >= 0 && row < 26) && (col >= 0 && col < 26)) {
-        retValue = true;
+        returnValue = true;
     }
 
-    return retValue;
+    return returnValue;
 
 }
 
 int Board::getNumOfTilesOnBoard() {
-    int retVal = 0;
+    int returnValue = 0;
 
     for (int i = 0; i < BOARD_DIM; i++) {
         for (int j = 0; j < BOARD_DIM; j++) {
             if(isLocationAvailable(i, j)) {
-                retVal += 1;
+                returnValue += 1;
             }
         } 
     }
     
-    return retVal;    
+    return returnValue;    
 }

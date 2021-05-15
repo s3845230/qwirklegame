@@ -86,17 +86,17 @@ void TileBag::addTile(Tile *data)
 
 std::string TileBag::getBagAsString()
 {
-   std::string retValue = "";
+   std::string returnString = "";
    for (int i = 0; i < this->size(); i++)
    {
-      retValue += this->tiles->get(i)->fullName;
+      returnString += this->tiles->get(i)->fullName;
       if (i < this->size() - 1)
       {
-         retValue += ",";
+         returnString += ",";
       }
    }
 
-   return retValue;
+   return returnString;
 }
 
 void TileBag::clearBag()

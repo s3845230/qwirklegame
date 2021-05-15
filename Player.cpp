@@ -62,6 +62,7 @@ void Player::showHand()
     }
     std::cout << std::endl;
 }
+
 void Player::setHand(std::string handAsString)
 {
     // TODO

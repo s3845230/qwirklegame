@@ -37,7 +37,7 @@ int LinkedList::size()
 
 Tile *LinkedList::get(int index)
 {
-   Tile *retTile = nullptr;
+   Tile *returnTile = nullptr;
 
    if (index >= 0 && index < size())
    {
@@ -51,23 +51,23 @@ Tile *LinkedList::get(int index)
          current = current->next;
       }
 
-      retTile = current->tile;
+      returnTile = current->tile;
    }
-   return retTile;
+   return returnTile;
 }
 std::string LinkedList::getContentAsString()
 {
-   std::string retValue = "";
+   std::string returnValue = "";
    for (int i = 0; i < this->size(); i++)
    {
-      retValue += this->get(i)->fullName;
+      returnValue += this->get(i)->fullName;
       if (i < this->size() - 1)
       {
-         retValue += ",";
+         returnValue += ",";
       }
    }
 
-   return retValue;
+   return returnValue;
 }
 void LinkedList::add_front(Tile *data)
 {
@@ -183,13 +183,13 @@ void LinkedList::clear()
 }
 
 int LinkedList::getIndex(std::string tileString) {
-   int index = -1;
+   int returnIndex = -1;
    
    for (int i = 0; i < this->size(); i++) {
       if (this->get(i)->fullName.compare(tileString) == 0) {
-         index = i;
+         returnIndex = i;
       }
    }
 
-   return index;
+   return returnIndex;
 }
