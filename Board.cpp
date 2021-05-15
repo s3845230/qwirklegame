@@ -139,6 +139,7 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
 
     // LOCATION VALIDATION
     if (!isLocationAvailable(row, col)) {
+        std::cout << "isLocationAvailable() FAIL" << std::endl;
         score[0] -= ERROR_SUBTRACT;
     }
 
@@ -168,6 +169,7 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
 
                 if (tile->colour == newTile->colour && tile->shape == newTile->shape) {
                     // SAME TILE AS NEIGHBOUR; INVALID
+                    std::cout << "SAME TILE AS NEIGHBOUR" << std::endl;
                     score[i] -= ERROR_SUBTRACT;
                 }
                 else if (tile->colour == newTile->colour) {
@@ -180,6 +182,7 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
                 }
                 else {
                     // TILE DOESN'T MATCH; INVALID
+                    std::cout << "TILE DOESN'T MATCH (1)" << std::endl;
                     score[i] -= ERROR_SUBTRACT;
                 }
 
@@ -190,6 +193,7 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
 
                     if (tile->colour == newTile->colour && tile->shape == newTile->shape) {
                         // SAME TILE EXISTS IN SEQUENCE; INVALID
+                        std::cout << "SAME TILE EXISTS IN SEQUENCE" << std::endl;
                         score[i] -= ERROR_SUBTRACT;
                     }
                     else if ((directionAttribute[direction] == SHAPE) && (tile->shape == newTile->shape)) {
@@ -202,6 +206,7 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
                     }
                     else {
                         // TILE DOESN'T MATCH; INVALID
+                        std::cout << "TILE DOESN'T MATCH (2)" << std::endl;
                         score[i] -= ERROR_SUBTRACT;
                     }
 
@@ -224,7 +229,7 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
         for (size_t j = i+1; j < horizontalTiles.size(); j++) {
             if (horizontalTiles[i] == horizontalTiles[j] && horizontalTiles[i] == horizontalTiles[j]) {
                 score[0] -= ERROR_SUBTRACT;
-                // std::cout << "erroringhere" << std::endl;
+                std::cout << "horizontalTiles FAIL" << std::endl;
             }
         }
     }
@@ -233,7 +238,7 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
         for (size_t j = i+1; j < verticalTiles.size(); j++) {
             if (verticalTiles[i] == verticalTiles[j] && verticalTiles[i] == verticalTiles[j]) {
                 score[0] -= ERROR_SUBTRACT;
-                // std::cout << "erroringhere" << std::endl;
+                std::cout << "verticalTiles FAIL" << std::endl;
             }
         }
     }

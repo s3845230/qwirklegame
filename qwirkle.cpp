@@ -101,7 +101,7 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
    {
       std::cout << std::endl;
       std::string filename;
-      std::cout << "Enter the filename from which load a game" << std::endl;
+      std::cout << "Enter the filename from which to load a game: " << std::endl;
       getInput(filename);
       game->loadGame(filename);
    }
@@ -248,8 +248,11 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
          if (score > 0) {
 
             // PRINT IF QWIRKLE
-            if (score >=12) {
+            if (score >=12 && score < 24) {
                std::cout << "QWIRKLE!!!" << std::endl;
+            }
+            else if (score >=24) {
+               std::cout <<"DOUBLEQWIRKLE!!!" << std::endl;
             }
 
             // PLACE TILE ON BOARD
@@ -296,7 +299,7 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
    {
       game->endGame(gameRunning);
    }
-   
+
    // SAVE GAME
    else if (input.find("save") != std::string::npos)
    {
