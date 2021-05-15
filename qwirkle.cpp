@@ -16,6 +16,7 @@ void welcomeMessage();
 void showMenu();
 void getInput(std::string &input);
 void makeSelection(std::string, Game *&game, bool &gameRunning);
+
 int main(void)
 {
    Game *game = new Game();
@@ -147,8 +148,6 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
    // PLACE TILE
    else if (input.find("place") != std::string::npos && input.find("at") != std::string::npos && input.size() == 14) {
 
-      // TODO:
-      // increase input sanitisation for row&col to include incorrect types, not just incorrect values
       int score = 0;
       Player* player = game->getPlayer(game->getCurrentPlayerID());
 
@@ -157,7 +156,6 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
       int row = -1;
       int col = -1;
          
-     
       // INPUT SANITSATION
       bool tileSanity = false;
       bool rowSanity = false;
@@ -169,13 +167,11 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
 
       // TILESTRING
       std::string tileString = input.substr(0, input.find(DELIMITER));
-      // std::cout << "tileString: " << tileString << std::endl;
       input = input.erase(0, input.find(DELIMITER) + DELIMITER.length());
       input = input.erase(0, input.find(DELIMITER) + DELIMITER.length());
 
       //LOCATION STRING
       std::string locationString = input;
-      // std::cout << "locationString: " << locationString <<  std::endl;
 
       //CHECK TILE AND LOCATION IS CORRECT TYPES
       if (isalpha(locationString[0]) && isalpha(tileString[0]) && isdigit(locationString[1]) && isdigit(tileString[1]) && isdigit(locationString[locationString.size()-1])) {
@@ -250,6 +246,8 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
 
          }
          if (score > 0) {
+
+            // PRINT IF QWIRKLE
             if (score >=12) {
                std::cout << "QWIRKLE!!!" << std::endl;
             }
@@ -298,6 +296,7 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
    {
       game->endGame(gameRunning);
    }
+   
    // SAVE GAME
    else if (input.find("save") != std::string::npos)
    {
