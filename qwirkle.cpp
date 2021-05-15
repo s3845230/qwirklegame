@@ -11,7 +11,6 @@
 #define CHARINTVAL   65
 #define HANDSIZE     6
 #define BOARD_DIM    26
-#define ERROR_TILE   "Z26"
 
 void welcomeMessage();
 void showMenu();
@@ -124,7 +123,7 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
 
          // TILESTRING
          std::string tileString = input.substr(0, input.find(DELIMITER));
-         // std::cout << "tileString: " << tileString << std::endl;
+         // std::cout << "tileString: " << tileString << std:pla:endl;
          input = input.erase(0, input.find(DELIMITER) + DELIMITER.length());
 
          // MATCH TILE INDEX AND GRAB TILE TO REPLACE
