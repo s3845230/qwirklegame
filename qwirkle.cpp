@@ -11,6 +11,7 @@
 #define CHARINTVAL   65
 #define HANDSIZE     6
 #define BOARD_DIM    26
+#define ERROR_TILE   "Z26"
 
 void welcomeMessage();
 void showMenu();
@@ -117,30 +118,30 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
       else {
          Player* player = game->getPlayer(game->getCurrentPlayerID());
          int tileIndex = -1;
-         bool tileSanity = false;
-         while (!(tileSanity)) {
-            std::string errorMessage = "ERROR: ";
-            // IMPORT VARIABLES AS STRINGS
-            input = input.erase(0, input.find(DELIMITER) + DELIMITER.length());
+         std::string errorMessage = "ERROR: ";
+         // IMPORT VARIABLES AS STRINGS
+         input = input.erase(0, input.find(DELIMITER) + DELIMITER.length());
 
-            // TILESTRING
-            std::string tileString = input.substr(0, input.find(DELIMITER));
-            // std::cout << "tileString: " << tileString << std::endl;
-            input = input.erase(0, input.find(DELIMITER) + DELIMITER.length());
+         // TILESTRING
+         std::string tileString = input.substr(0, input.find(DELIMITER));
+         // std::cout << "tileString: " << tileString << std::endl;
+         input = input.erase(0, input.find(DELIMITER) + DELIMITER.length());
 
-            // MATCH TILE INDEX AND GRAB TILE TO REPLACE
-            tileIndex = player->getHand()->getIndex(tileString);
-            if (0 <= tileIndex && tileIndex < HANDSIZE) {
-               tileSanity = true;
-            }
-            else {
-               errorMessage += "The specified tile does not exist in your hand. ";
-               errorMessage += "Please try again: ";
-               std::cout << errorMessage << std::endl;
-               getInput(input);
+         // MATCH TILE INDEX AND GRAB TILE TO REPLACE
+         tileIndex = player->getHand()->getIndex(tileString);
+         if (0 <= tileIndex && tileIndex < HANDSIZE) {
+            game->replaceTileInHand(tileIndex);
+         }
+         else {
+            errorMessage += "The specified tile does not exist in your hand. ";
+            errorMessage += "Please try again: ";
+            std::cout << errorMessage << std::endl;
+            std::cout << std::endl;
+            if (game->getPlayerCount() != 0)
+            {
+               game->getPlayer(game->getCurrentPlayerID())->setRepeatTurn(true);
             }
          }
-         game->replaceTileInHand(tileIndex);
       }
    }
 
@@ -157,86 +158,81 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
       int row = -1;
       int col = -1;
          
-      // WHILE CURRENT PLAYER HASN'T MADE A VALID PLAY
-      while (score<=0) {
+     
+      // INPUT SANITSATION
+      bool tileSanity = false;
+      bool rowSanity = false;
+      bool colSanity = false;
+      std::string errorMessage = "ERROR: ";
 
-         // INPUT SANITSATION
-         bool tileSanity = false;
-         bool rowSanity = false;
-         bool colSanity = false;
-         std::string errorMessage = "ERROR: ";
+      // IMPORT VARIABLES AS STRINGS
+      input = input.erase(0, input.find(DELIMITER) + DELIMITER.length());
 
-         // WHILE INPUT IS NOT VALID
-         while (!(tileSanity && rowSanity && colSanity)) {
+      // TILESTRING
+      std::string tileString = input.substr(0, input.find(DELIMITER));
+      // std::cout << "tileString: " << tileString << std::endl;
+      input = input.erase(0, input.find(DELIMITER) + DELIMITER.length());
+      input = input.erase(0, input.find(DELIMITER) + DELIMITER.length());
 
-            // INPUT SANITSATION
-            tileSanity = false;
-            rowSanity = false;
-            colSanity = false;
-            errorMessage = "ERROR: ";
+      //LOCATION STRING
+      std::string locationString = input;
+      // std::cout << "locationString: " << locationString <<  std::endl;
 
-            // IMPORT VARIABLES AS STRINGS
-            input = input.erase(0, input.find(DELIMITER) + DELIMITER.length());
+      //CHECK TILE AND LOCATION IS CORRECT TYPES
+      if (isalpha(locationString[0]) && isalpha(tileString[0]) && isdigit(locationString[1]) && isdigit(tileString[1]) && isdigit(locationString[locationString.size()-1])) {
 
-            // TILESTRING
-            std::string tileString = input.substr(0, input.find(DELIMITER));
-            // std::cout << "tileString: " << tileString << std::endl;
-            input = input.erase(0, input.find(DELIMITER) + DELIMITER.length());
-            input = input.erase(0, input.find(DELIMITER) + DELIMITER.length());
+         // MATCH TILE INDEX AND GRAB TILE TO ADD TO BOARD
+         tileIndex = player->getHand()->getIndex(tileString);
+         // std::cout << "player->getHand()->getIndex(" << tileString << "): " << player->getHand()->getIndex(tileString) << std::endl;
+         // std::cout << "tileIndex: " << tileIndex << std::endl;
+         // CHECK IF TILE IS VALID
+         if (0 <= tileIndex && tileIndex < HANDSIZE) {
+            tileSanity = true;
+            // std::cout << "tileSanity: " << tileSanity << std::endl;
+            tile = player->getHand()->get(tileIndex);
+         }
+         else {
+            errorMessage += "The specified tile does not exist in your hand. ";
+         }
+         // std::cout << "tile.fullName: " << tile->fullName << std::endl;
 
-            //LOCATION STRING
-            std::string locationString = input;
-            // std::cout << "locationString: " << locationString <<  std::endl;
+         // IMPORT ROW
+         row = locationString[0] - CHARINTVAL;
+         // std::cout << "row: " << row << std::endl;
+         // CHECK IF ROW VALUE IS VALID
+         if (0 <= row && row < BOARD_DIM) {
+            rowSanity = true;
+            // std::cout << "rowSanity: " << rowSanity << std::endl;
+         }
+         else {
+            errorMessage += "The specified row is out of bounds. ";
+         }
 
-            // MATCH TILE INDEX AND GRAB TILE TO ADD TO BOARD
-            tileIndex = player->getHand()->getIndex(tileString);
-            // std::cout << "player->getHand()->getIndex(" << tileString << "): " << player->getHand()->getIndex(tileString) << std::endl;
-            // std::cout << "tileIndex: " << tileIndex << std::endl;
-            // CHECK IF TILE IS VALID
-            if (0 <= tileIndex && tileIndex < HANDSIZE) {
-               tileSanity = true;
-               // std::cout << "tileSanity: " << tileSanity << std::endl;
-               tile = player->getHand()->get(tileIndex);
-            }
-            else {
-               errorMessage += "The specified tile does not exist in your hand. ";
-            }
-            // std::cout << "tile.fullName: " << tile->fullName << std::endl;
+         // IMPORT COL
+         std::string colString = locationString.substr(1, std::string::npos);
+         // std::cout << "colString: " << colString << std::endl;
+         col = std::stoi(locationString.substr(1, std::string::npos));
+         // std::cout << "col: " << col << std::endl;
+         // CHECK IF COLUMN VALUE IS VALID
+         if (0 <= col && col < BOARD_DIM) {
+            colSanity = true;
+            // std::cout << "colSanity: " << colSanity << std::endl;
+         }
+         else {
+            errorMessage += "The specified column is out of bounds. ";
+         }
 
-            // IMPORT ROW
-            row = locationString[0] - CHARINTVAL;
-            // std::cout << "row: " << row << std::endl;
-            // CHECK IF ROW VALUE IS VALID
-            if (0 <= row && row < BOARD_DIM) {
-               rowSanity = true;
-               // std::cout << "rowSanity: " << rowSanity << std::endl;
-            }
-            else {
-               errorMessage += "The specified row is out of bounds. ";
-            }
-
-            // IMPORT COL
-            std::string colString = locationString.substr(1, std::string::npos);
-            // std::cout << "colString: " << colString << std::endl;
-            col = std::stoi(locationString.substr(1, std::string::npos));
-            // std::cout << "col: " << col << std::endl;
-            // CHECK IF COLUMN VALUE IS VALID
-            if (0 <= col && col < BOARD_DIM) {
-               colSanity = true;
-               // std::cout << "colSanity: " << colSanity << std::endl;
-            }
-            else {
-               errorMessage += "The specified column is out of bounds. ";
-            }
-
-            // DISPLAY ERROR IF ANY INPUT IS INCORRECT
-            if ((!tileSanity || !rowSanity || !colSanity)) {
-               errorMessage += "Please try again: ";
-               std::cout << errorMessage << std::endl;
-               getInput(input);
+         // DISPLAY ERROR IF ANY INPUT IS INCORRECT
+         if ((!tileSanity || !rowSanity || !colSanity)) {
+            errorMessage += "Please try again: ";
+            std::cout << errorMessage << std::endl;
+            std::cout << std::endl;
+            if (game->getPlayerCount() != 0)
+            {
+               game->getPlayer(game->getCurrentPlayerID())->setRepeatTurn(true);
             }
          }
-         if (game->getBag()->size() == 60) {
+         else if (game->getBag()->size() == 60) {
             score++;
          }
          else if (game->getBoard()->scoreValidate(row, col, tile) > 0) {
@@ -247,24 +243,36 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
             // EXPECT PLAYER TO PLACE NEW TILE
             std::cout << "The specified location is not valid, please try again: " << std::endl;
             // std::cout << "score: " << score << std::endl;
-            getInput(input);
+            std::cout << std::endl;
+            if (game->getPlayerCount() != 0)
+            {
+               game->getPlayer(game->getCurrentPlayerID())->setRepeatTurn(true);
+            }
 
          }
+         if (score > 0) {
+            if (score >=12) {
+               std::cout << "QWIRKLE!!!" << std::endl;
+            }
 
+            // PLACE TILE ON BOARD
+            game->placeTileOnBoard(tile, row, col);
+
+            // ADJUST PLAYER SCORE + HAND
+            player->addScore(score);
+            player->getHand()->remove(tileIndex);
+            game->addTileToPlayerHand(game->getCurrentPlayerID());
+            // player->addTile(game->getBag()->popTile());
+         }
       }
-
-      if (score >=12) {
-         std::cout << "QWIRKLE!!!" << std::endl;
+      else {
+         std::cout << "Invalid input" << std::endl;
+         std::cout << std::endl;
+         if (game->getPlayerCount() != 0)
+         {
+            game->getPlayer(game->getCurrentPlayerID())->setRepeatTurn(true);
+         }
       }
-
-      // PLACE TILE ON BOARD
-      game->placeTileOnBoard(tile, row, col);
-
-      // ADJUST PLAYER SCORE + HAND
-      player->addScore(score);
-      player->getHand()->remove(tileIndex);
-      game->addTileToPlayerHand(game->getCurrentPlayerID());
-      // player->addTile(game->getBag()->popTile());
    }
 
    // LOAD GAME
