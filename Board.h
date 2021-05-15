@@ -35,6 +35,9 @@ public:
 private:
     std::vector<std::vector<Tile *> > state;
 
+    // MODIFIERS TO ADD TO COORDINATES WHEN TRAVERSING
+    const int directionTravel[8] = {1, 0, -1, 0, 0, 1, 0, -1};
+
 };
 
 #endif // ASSIGN2_BOARD_H
