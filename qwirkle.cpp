@@ -168,7 +168,7 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
    }
 
    // PLACE TILE
-   else if (input.find("place") != std::string::npos && input.find("at") != std::string::npos && input.size() == 14) {
+   else if (input.find("place") != std::string::npos && input.find("at") != std::string::npos && input.size() < 16 && input.size() > 13) {
 
       int score = 0;
       Player* player = game->getPlayer(game->getCurrentPlayerID());

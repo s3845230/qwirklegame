@@ -128,6 +128,7 @@ int Board::validateSequence(std::vector<Tile*> currentTiles, Tile *newTile) {
     int score = 0;
     int test;
 
+    // RECORD WHETHER THE CURRENT SEQUENCE HAS SIMILAR SHAPES OR COLOURS
     if (currentTiles.size() > 0) {
         if (currentTiles[0]->colour == newTile->colour) {
             attribute = 1;
@@ -151,6 +152,8 @@ int Board::validateSequence(std::vector<Tile*> currentTiles, Tile *newTile) {
             }
         }
     }
+
+    // SET INITIAL SCORE TO THE LENGTH OF THE SEQUENCE
     int sequenceScore = static_cast<int>(currentTiles.size());
 
     // ADDS 1 POINT FOR THE TILE BEING PLACED IF IT MAKES A SEQUENCE
@@ -205,8 +208,10 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
                     tile = this->state[nextRow][nextCol];
                     nextRow += directionTravel[i];
                     nextCol += directionTravel[4 + i];
+                    // ADD THE TILE TO THE RELEVANT TILE SEQUENCE
                     currentVector->push_back(tile);
                 }
+            // ELSES TO EXIT THE LOOP
                 else {
                     j = 7;
                 }
