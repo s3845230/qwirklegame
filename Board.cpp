@@ -136,7 +136,7 @@ int Board::validateSequence(std::vector<Tile*> currentTiles, Tile *newTile) {
             attribute = 2;
         }
     }
-    // ITERATE THROUGH ALL TILES IN THE HORIZONTAL AND VERTICAL SEQUENCE AND CHECK THAT ALL TILES IN EACH SEQUENCE ARE UNIQUE
+    // ITERATE THROUGH ALL TILES IN THE HORIZONTAL AND VERTICAL SEQUENCE AND ENSURE THAT NO TILES ARE OUT OF SEQUENCE
     for (size_t i = 0; i < currentTiles.size(); i++) {
         for (size_t j = i+1; j < currentTiles.size(); j++) {
             test = 0;
@@ -152,9 +152,12 @@ int Board::validateSequence(std::vector<Tile*> currentTiles, Tile *newTile) {
         }
     }
     int sequenceScore = static_cast<int>(currentTiles.size());
+
+    // ADDS 1 POINT FOR THE TILE BEING PLACED IF IT MAKES A SEQUENCE
     if (sequenceScore > 0) {
         sequenceScore += 1;
     }
+    // ADDS 6 POINTS FOR QWIRKLES
     if (sequenceScore == 6) {
         sequenceScore += 6;
     }
@@ -194,6 +197,8 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
         if (direction == 1) {
             currentVector = &horizontalTiles;
         }
+
+        // CREATE SEQUENCES SURROUNDING TARGET LOCATION
         for (int j = 0; j < 7; j++) {
             if (nextRow < static_cast<int>(state.size()) && nextRow > -1 && nextCol < static_cast<int>(state[1].size()) && nextCol > -1) {
                 if (this->state[nextRow][nextCol] != nullptr) {
@@ -211,10 +216,6 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
             }
         }
     }
-    
-    // for (int i = 0; i < 4; i++) {
-    //     std::cout << "Score " << i << ": " << score[i] << std::endl;
-    // }
 
     // ADDING SCORE
     score += validateSequence(verticalTiles, newTile);
