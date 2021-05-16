@@ -123,29 +123,62 @@ std::vector<std::vector<Tile *> > Board::getState() {
     return state;
 }
 
+int Board::validateSequence(std::vector<Tile*> currentTiles, Tile *newTile) {
+    int attribute = 0;
+    int score = 0;
+    int test;
+
+    if (currentTiles.size() > 0) {
+        if (currentTiles[0]->colour == newTile->colour) {
+            attribute = 1;
+        }
+        else if (currentTiles[0]->shape == newTile->shape) {
+            attribute = 2;
+        }
+    }
+    // ITERATE THROUGH ALL TILES IN THE HORIZONTAL AND VERTICAL SEQUENCE AND CHECK THAT ALL TILES IN EACH SEQUENCE ARE UNIQUE
+    for (size_t i = 0; i < currentTiles.size(); i++) {
+        for (size_t j = i+1; j < currentTiles.size(); j++) {
+            test = 0;
+            if (currentTiles[i]->colour == currentTiles[j]->colour) {
+                test += 1;
+            }
+            if (currentTiles[i]->shape == currentTiles[j]->shape) {
+                test += 2;
+            }
+            if (attribute != test) {
+                score -= ERROR_SUBTRACT;
+            }
+        }
+    }
+    int sequenceScore = static_cast<int>(currentTiles.size());
+    if (sequenceScore > 0) {
+        sequenceScore += 1;
+    }
+    if (sequenceScore == 6) {
+        sequenceScore += 6;
+    }
+    return sequenceScore;
+}
+
 int Board::scoreValidate(int row, int col, Tile *newTile) {
 
     // VARIABLE INITIALISATION
-    // ARRAY TO STORE THE SCORES ADDED UP IN EACH DIRECTION
-    int score[4] = {0, 0, 0, 0};
     // MODIFIERS TO ADD TO COORDINATES WHEN TRAVERSING
     int directionTravel[8] = {1, 0, -1, 0, 0, 1, 0, -1};
-    // ARRAY TO STORE THE ATTRIBUTE MATCHING THE SEQUENCE IN EACH DIRECTION
-    char directionAttribute[2];
+    int score = 0;
     
     // VECTORS TO HOLD THE VERTICAL AND HORIZONTAL TILE SEQUENCES AROUND THE TARGET LOCATION
-    std::vector<std::string> horizontalTiles;
-    std::vector<std::string> verticalTiles;
-    std::vector<std::string>* currentVector;
+    std::vector<Tile*> horizontalTiles;
+    std::vector<Tile*> verticalTiles;
+    std::vector<Tile*>* currentVector;
 
     // LOCATION VALIDATION
-    if (!isLocationAvailable(row, col)) {
-        std::cout << "isLocationAvailable() FAIL" << std::endl;
-        score[0] -= ERROR_SUBTRACT;
+    if (this->state[row][col] != nullptr) {
+        score -= ERROR_SUBTRACT;
     }
 
     for (int i = 0; i < 4; i++) {
-
         // INITALISE NEXT LOCATION
         int nextRow = row + directionTravel[i];
         int nextCol = col + directionTravel[4 + i];
@@ -161,114 +194,34 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
         if (direction == 1) {
             currentVector = &horizontalTiles;
         }
-
-
-        if (isDirectionValid(nextRow, nextCol)) {
-            // CHECKING TO SEE IF FOUR IMMEDIATE NEIGHBOURS ARE VALID
-            if (!isLocationAvailable(nextRow, nextCol)) {
-                tile = this->state[nextRow][nextCol];
-
-                if (tile->colour == newTile->colour && tile->shape == newTile->shape) {
-                    // SAME TILE AS NEIGHBOUR; INVALID
-                    std::cout << "SAME TILE AS NEIGHBOUR" << std::endl;
-                    score[i] -= ERROR_SUBTRACT;
-                }
-                else if (tile->colour == newTile->colour) {
-                    directionAttribute[direction] = COLOUR;
-                    score[i]++;
-                }
-                else if (tile->shape == newTile->shape) {
-                    directionAttribute[direction] = SHAPE;
-                    score[i]++;
-                }
-                else {
-                    // TILE DOESN'T MATCH; INVALID
-                    std::cout << "TILE DOESN'T MATCH (1)" << std::endl;
-                    score[i] -= ERROR_SUBTRACT;
-                }
-
-                // CHECKING TO SEE IF EACH SEQUENCE FOLLOWING THE NEIGHBOURS ARE VALID
-                while (!isLocationAvailable(nextRow, nextCol) && (isDirectionValid(nextRow, nextCol))) {
-
+        for (int j = 0; j < 7; j++) {
+            if (nextRow < static_cast<int>(state.size()) && nextRow > -1 && nextCol < static_cast<int>(state[1].size()) && nextCol > -1) {
+                if (this->state[nextRow][nextCol] != nullptr) {
                     tile = this->state[nextRow][nextCol];
-
-                    if (tile->colour == newTile->colour && tile->shape == newTile->shape) {
-                        // SAME TILE EXISTS IN SEQUENCE; INVALID
-                        std::cout << "SAME TILE EXISTS IN SEQUENCE" << std::endl;
-                        score[i] -= ERROR_SUBTRACT;
-                    }
-                    else if ((directionAttribute[direction] == SHAPE) && (tile->shape == newTile->shape)) {
-                        score[i]++;
-
-                        // ADD THE TILE TO THE VERTICAL/HORIZONTAL SEQUENCE
-                        currentVector->push_back(tile->fullName);
-                    }
-                    else if ((directionAttribute[direction] == COLOUR) && (tile->colour == newTile->colour)) {
-                        score[i]++;
-
-                        // ADD THE TILE TO THE VERTICAL/HORIZONTAL SEQUENCE
-                        currentVector->push_back(tile->fullName);
-                    }
-                    else {
-                        // TILE DOESN'T MATCH; INVALID
-                        std::cout << "TILE DOESN'T MATCH (2)" << std::endl;
-                        score[i] -= ERROR_SUBTRACT;
-                    }
-
                     nextRow += directionTravel[i];
                     nextCol += directionTravel[4 + i];
-
+                    currentVector->push_back(tile);
                 }
+                else {
+                    j = 7;
+                }
+            }
+            else {
+                j = 7;
             }
         }
     }
     
-    // ITERATE THROUGH ALL TILES IN THE HORIZONTAL AND VERTICAL SEQUENCE AND CHECK THAT ALL TILES IN EACH SEQUENCE ARE UNIQUE
-    for (size_t i = 0; i < horizontalTiles.size(); i++) {
-        for (size_t j = i+1; j < horizontalTiles.size(); j++) {
-            if (horizontalTiles[i] == horizontalTiles[j]) {
-                score[0] -= ERROR_SUBTRACT;
-            }
-        }
-    }
-
-    for (size_t i = 0; i < verticalTiles.size(); i++) {
-        for (size_t j = i+1; j < verticalTiles.size(); j++) {
-            if (verticalTiles[i] == verticalTiles[j]) {
-                score[0] -= ERROR_SUBTRACT;
-            }
-        }
-    }
     // for (int i = 0; i < 4; i++) {
     //     std::cout << "Score " << i << ": " << score[i] << std::endl;
     // }
 
-    // SCORE CORRECTION
-    for (int i = 0; i < 2; i++) {
-        // DON'T COUNT NEWTILE SCORE TWICE
-        if (score[i] > 0 && score[i+2] > 0) {
-            score[i]--;
-        }
-        // ADD 6 TO SCORE IF QWIRKLE
-        if (score[i] + score[i+2] == 6) {
-            score[i] += 6;
-        }
-    }
-
-    // RETURN TOTAL SCORE FOR ALL DIRECTIONS
-    return score[0] + score[1] + score[2] + score[3];
+    // ADDING SCORE
+    score += validateSequence(verticalTiles, newTile);
+    score += validateSequence(horizontalTiles, newTile);
+    return score;
 }
 
-bool Board::isDirectionValid(int row, int col) {
-    bool returnValue = false;
-
-    if ((row >= 0 && row < 26) && (col >= 0 && col < 26)) {
-        returnValue = true;
-    }
-
-    return returnValue;
-
-}
 
 int Board::getNumOfTilesOnBoard() {
     int returnValue = 0;

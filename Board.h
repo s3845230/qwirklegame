@@ -25,12 +25,12 @@ public:
 
     int scoreValidate(int row, int col, Tile *newTile);
     bool isLocationAvailable(int row, int col);
+    int validateSequence(std::vector<Tile*> currentTiles, Tile *newTile);
+
     void showBoard();
     std::string getStateAsString();
     void setBoard(std::string boardAsString);
     int getNumOfTilesOnBoard();
-
-    bool isDirectionValid(int row, int col);
 
 private:
     std::vector<std::vector<Tile *> > state;
