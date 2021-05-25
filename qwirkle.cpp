@@ -1,4 +1,5 @@
 
+
 #include "LinkedList.h"
 #include "TileBag.h"
 #include <iostream>
@@ -71,19 +72,25 @@ void getInput(std::string &input)
 }
 
 void validateName(std::string &input) {
-   bool valid = false;
-   while (!valid) {
-      for (int i = 0; i < int(input.length()); i++) {
-         if (!isalpha(input[i])) {
-            std::cout << "The name you've input is not valid, please try again: " << std::endl;
-            getInput(input);
-            validateName(input);
-         }
-         input[i] = toupper(input[i]);
+   for (int i = 0; i < int(input.length()); i++) {
+      if (!isalpha(input[i])) {
+         std::cout << "The name you've input is not valid, please try again: " << std::endl;
+         getInput(input);
+         validateName(input);
       }
-      valid = true;
-
+      input[i] = toupper(input[i]);
    }
+}
+
+int validatePlayerCount(std::string &input) {
+   bool valid = false;
+   for (int i = 1; i < 5; i++) {
+      if (input == std::to_string(i)) {
+         return i;
+      }
+   }
+   getInput(input);
+   validatePlayerCount(input);
 }
 
 void makeSelection(std::string input, Game *&game, bool &gameRunning)
@@ -95,21 +102,18 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
       std::cout << "Starting a New Game" << std::endl << std::endl;;
       std::cout << std::endl;
 
-      // PLAYER 1 NAME INPUT
-      std::cout << "Enter a name for player 1 (uppercase characters only)" << std::endl;
-      getInput(inputName);
-      validateName(inputName);
-      
-      game->addPlayer(inputName);
+      std::cout << "Enter number of players" << std::endl << std::endl;;
       std::cout << std::endl;
 
-      // PLAYER 2 NAME INPUT
-      std::cout << "Enter a name for player 2 (uppercase characters only)" << std::endl;
-      getInput(inputName);
-      validateName(inputName);
+      int playerCount = validatePlayerCount(input);
 
-      game->addPlayer(inputName);
-      std::cout << std::endl;
+      for (int i = 0; i < playerCount; i++) {
+         std::cout << "Enter a name for player " << i << " (uppercase characters only)" << std::endl;
+         getInput(inputName);
+         validateName(inputName);
+         game->addPlayer(inputName);
+         std::cout << std::endl;
+      }
 
       // WELCOME MESSAGE
       std::cout << "Let's Play!" << std::endl;
@@ -325,7 +329,7 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
    }
 
    // SAVE GAME
-   else if (input.find("save") != std::string::npos)
+   else if (input.find("save") != std::string::npos)  
    {
       std::string filename = input.substr(5);
       

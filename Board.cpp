@@ -123,18 +123,18 @@ std::vector<std::vector<Tile *> > Board::getState() {
     return state;
 }
 
-int Board::validateSequence(std::vector<Tile*> currentTiles, Tile *newTile) {
+int Board::validateSequence(std::vector<Tile*> currentTiles) {
     // SET INITIAL SCORE TO THE LENGTH OF THE SEQUENCE
     int sequenceScore = static_cast<int>(currentTiles.size());
     int attribute = 0;
     int test;
 
     // RECORD WHETHER THE CURRENT SEQUENCE HAS SIMILAR SHAPES OR COLOURS
-    if (currentTiles.size() > 0) {
-        if (currentTiles[0]->colour == newTile->colour) {
+    if (currentTiles.size() > 1) {
+        if (currentTiles[0]->colour == currentTiles[1]->colour) {
             attribute = 1;
         }
-        else if (currentTiles[0]->shape == newTile->shape) {
+        else if (currentTiles[0]->shape == currentTiles[1]->shape) {
             attribute = 2;
         }
         else {
@@ -158,8 +158,8 @@ int Board::validateSequence(std::vector<Tile*> currentTiles, Tile *newTile) {
     }
 
     // ADDS 1 POINT FOR THE TILE BEING PLACED IF IT MAKES A SEQUENCE
-    if (sequenceScore > 0) {
-        sequenceScore += 1;
+    if (sequenceScore == 1) {
+        sequenceScore = 0;
     }
     // ADDS 6 POINTS FOR QWIRKLES
     if (sequenceScore == 6) {
@@ -180,53 +180,107 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
     std::vector<Tile*> verticalTiles;
     std::vector<Tile*>* currentVector;
 
+    // ADD NEW TILE TO BOTH SEQUENCE VECTORS
+    verticalTiles.push_back(newTile);
+    horizontalTiles.push_back(newTile);
+
     // LOCATION VALIDATION
+    
+    
     if (this->state[row][col] != nullptr) {
         score -= ERROR_SUBTRACT;
     }
+    else if (placeableLocation(row, col) == false) {
+        score -= ERROR_SUBTRACT;
+    }
+    else {
+        for (int i = 0; i < 4; i++) {
+            // INITALISE NEXT LOCATION
+            int nextRow = row + directionTravel[i];
+            int nextCol = col + directionTravel[4 + i];
 
-    for (int i = 0; i < 4; i++) {
-        // INITALISE NEXT LOCATION
-        int nextRow = row + directionTravel[i];
-        int nextCol = col + directionTravel[4 + i];
+            // SET DIRECTION TO 0 (VERTICAL) OR 1 (HORIZONTAL)
+            int direction = i % 2;
+            Tile *tile;
 
-        // SET DIRECTION TO 0 (VERTICAL) OR 1 (HORIZONTAL)
-        int direction = i % 2;
-        Tile *tile;
-
-        // SET POINTER TO HORIZONTAL/VERTICAL VECTOR
-        if (direction == 0) {
-            currentVector = &verticalTiles;
-        }
-        if (direction == 1) {
-            currentVector = &horizontalTiles;
-        }
-
-        // CREATE SEQUENCES SURROUNDING TARGET LOCATION
-        for (int j = 0; j < 7; j++) {
-            if (nextRow < static_cast<int>(state.size()) && nextRow > -1 && nextCol < static_cast<int>(state[1].size()) && nextCol > -1) {
-                if (this->state[nextRow][nextCol] != nullptr) {
-                    tile = this->state[nextRow][nextCol];
-                    nextRow += directionTravel[i];
-                    nextCol += directionTravel[4 + i];
-                    // ADD THE TILE TO THE RELEVANT TILE SEQUENCE
-                    currentVector->push_back(tile);
-                }
-            // ELSES TO EXIT THE LOOP
-                else {
-                    j = 7;
-                }
+            // SET POINTER TO HORIZONTAL/VERTICAL VECTOR
+            if (direction == 0) {
+                currentVector = &verticalTiles;
             }
-            else {
-                j = 7;
+            if (direction == 1) {
+                currentVector = &horizontalTiles;
+            }
+
+            // CREATE SEQUENCES SURROUNDING TARGET LOCATION
+            for (int j = 0; j < 7; j++) {
+                if (nextRow < static_cast<int>(state.size()) && nextRow > -1 && nextCol < static_cast<int>(state[1].size()) && nextCol > -1) {
+                    if (this->state[nextRow][nextCol] != nullptr) {
+                        tile = this->state[nextRow][nextCol];
+                        nextRow += directionTravel[i];
+                        nextCol += directionTravel[4 + i];
+                        // ADD THE TILE TO THE RELEVANT TILE SEQUENCE
+                        currentVector->push_back(tile);
+                    }
+                // ELSES TO EXIT THE LOOP
+                    else {
+                        j = 7;}
+                }
+                else {
+                    j = 7;}
             }
         }
     }
 
     // ADDING SCORE
-    score += validateSequence(verticalTiles, newTile);
-    score += validateSequence(horizontalTiles, newTile);
+    score += validateSequence(verticalTiles);
+    score += validateSequence(horizontalTiles);
     return score;
+}
+
+bool Board::placeableLocation(int row, int col) {
+    bool northEmpty = false;
+    bool eastEmpty = false;
+    bool southEmpty = false;
+    bool westEmpty = false;
+    
+    if (row == 0) {
+        northEmpty = true;
+    }
+    else {
+        if (this->state[row-1][col] == nullptr) {
+            northEmpty = true;
+        }
+    }
+    if (row == static_cast<int>(state.size())-1) {
+        southEmpty = true;
+    }
+    else {
+        if (this->state[row+1][col] == nullptr) {
+            southEmpty = true;
+        }
+    }
+    if (col == static_cast<int>(state[1].size())) {
+        eastEmpty = true;
+    }
+    else {
+        if (this->state[row][col+1] == nullptr) {
+            eastEmpty = true;
+        }
+    }
+    if (col == 0) {
+        westEmpty = true;
+    }
+    else {
+        if (this->state[row-1][col-1] == nullptr) {
+            westEmpty = true;
+        }
+    }
+    if (northEmpty && westEmpty && eastEmpty && southEmpty) {
+        return false;
+    }
+    else {
+        return true;
+    }
 }
 
 
@@ -242,4 +296,13 @@ int Board::getNumOfTilesOnBoard() {
     }
     
     return returnValue;    
+}
+
+void Board::findBestLocation(int &row, int &col, Tile *newTile) {
+    for (int i = 0; i < BOARD_DIM; i++)
+    {
+        for (int j = 0; j < BOARD_DIM; j++)
+        {
+        }
+    }
 }
