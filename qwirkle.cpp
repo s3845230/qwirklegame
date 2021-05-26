@@ -35,8 +35,14 @@ int main(void)
       while (game->isBeingPlayed())
       {
          game->showGameState();
-         getInput(input);
-         makeSelection(input, game, gameRunning);
+         if (game->getPlayer(game->getCurrentPlayerID())->getName() == "A-I") {
+            input = "A-I";
+            makeSelection(input, game, gameRunning);
+         }
+         else {
+            getInput(input);
+            makeSelection(input, game, gameRunning);  
+         }
          // continue game play
          game->continueGamePlay(gameRunning);
       } 
@@ -72,25 +78,31 @@ void getInput(std::string &input)
 }
 
 void validateName(std::string &input) {
-   for (int i = 0; i < int(input.length()); i++) {
-      if (!isalpha(input[i])) {
-         std::cout << "The name you've input is not valid, please try again: " << std::endl;
-         getInput(input);
-         validateName(input);
+   if (input.compare("A-I") == 0 && input.size() == 3) {}
+   else {
+      for (int i = 0; i < int(input.length()); i++) {
+         if (!isalpha(input[i])) {
+            std::cout << "The name you've input is not valid, please try again: " << std::endl;
+            getInput(input);
+            validateName(input);
+         }
+         input[i] = toupper(input[i]);
       }
-      input[i] = toupper(input[i]);
    }
 }
 
 int validatePlayerCount(std::string &input) {
    bool valid = false;
-   for (int i = 1; i < 5; i++) {
-      if (input == std::to_string(i)) {
-         return i;
+   while (valid == false) {
+      std::cout << "Please enter a number between 2 and 4" << std::endl;
+      getInput(input);
+      for (int i = 2; i < 5; i++) {
+         if (input == std::to_string(i)) {
+            valid = true;
+         }
       }
    }
-   getInput(input);
-   validatePlayerCount(input);
+   return stoi(input);
 }
 
 void makeSelection(std::string input, Game *&game, bool &gameRunning)
@@ -99,15 +111,14 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
    if (input.compare("1") == 0 && !game->isBeingPlayed())
    {
       std::string inputName;
-      std::cout << "Starting a New Game" << std::endl << std::endl;;
+      std::cout << "Starting a New Game" << std::endl << std::endl;
       std::cout << std::endl;
 
-      std::cout << "Enter number of players" << std::endl << std::endl;;
-      std::cout << std::endl;
+      std::cout << "Enter number of players" << std::endl;
 
       int playerCount = validatePlayerCount(input);
 
-      for (int i = 0; i < playerCount; i++) {
+      for (int i = 1; i < playerCount+1; i++) {
          std::cout << "Enter a name for player " << i << " (uppercase characters only)" << std::endl;
          getInput(inputName);
          validateName(inputName);
@@ -134,14 +145,14 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
    
    // REPLACE TILE
    else if (input.find("replace") != std::string::npos && input.size() == 10) {
-      if (game->getBag()->size() == 0) {
-         std::cout << "Bag is empty. Please try again: " << std::endl;
-         std::cout << std::endl;
-         if (game->getPlayerCount() != 0){
-            game->getPlayer(game->getCurrentPlayerID())->setRepeatTurn(true);
-         }
-      }
-      else {
+      // if (game->getBag()->size() == 0) {
+      //    std::cout << "Bag is empty. Please try again: " << std::endl;
+      //    std::cout << std::endl;
+      //    if (game->getPlayerCount() != 0){
+      //       game->getPlayer(game->getCurrentPlayerID())->setRepeatTurn(true);
+      //    }
+      // }
+      // else {
          Player* player = game->getPlayer(game->getCurrentPlayerID());
          int tileIndex = -1;
          std::string errorMessage = "ERROR: ";
@@ -168,7 +179,7 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
                game->getPlayer(game->getCurrentPlayerID())->setRepeatTurn(true);
             }
          }
-      }
+      // }
    }
 
    // PLACE TILE
@@ -255,7 +266,7 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
          }
 
          // LET PLAYER PLACE TILE ON TURN ONE, DON'T VALIDATE (score = 1)
-         else if (game->getBag()->size() == TURNONEBAGSIZE) {
+         else if (game->getBag()->size() == TURNONEBAGSIZE - (game->getPlayerCount()-2) * HANDSIZE) {
             score++;
          }
          // IF NOT TURN ONE, SCORE + VALIDATE TILE PLACEMENT
@@ -328,12 +339,121 @@ void makeSelection(std::string input, Game *&game, bool &gameRunning)
       game->endGame(gameRunning);
    }
 
+   else if (input.compare("quit") == 0 && game->isBeingPlayed())
+   {
+      game->endGame(gameRunning);
+   }
+
    // SAVE GAME
-   else if (input.find("save") != std::string::npos)  
+   else if (input.find("save ") != std::string::npos)  
    {
       std::string filename = input.substr(5);
       
       game->saveGame(filename);
+   }
+
+   // AI
+   else if (input.compare("A-I") == 0 && input.size() == 3) {
+      Player* player = game->getPlayer(game->getCurrentPlayerID());
+      Tile* tile;
+      int score = 0;
+      // LET PLAYER PLACE TILE ON TURN ONE, DON'T VALIDATE (score = 1) 
+      if (game->getBag()->size() == TURNONEBAGSIZE - (game->getPlayerCount()-2) * HANDSIZE) {
+         score++;
+         game->placeTileOnBoard(player->getHand()->get(0), 13, 13);
+
+         // ADJUST PLAYER SCORE + HAND
+         player->addScore(score);
+         player->getHand()->remove(0);
+         game->addTileToPlayerHand(game->getCurrentPlayerID());
+      }
+      else {
+         int currentScore = 0;
+         int bestScore = 0;
+         int bestRow = -1;
+         int bestCol = -1;
+         int currentRow = -1;
+         int currentCol = -1;
+         int bestTileIndex = 0;
+         for (int i = 0; i < player->getHand()->size(); i++) {
+            tile = player->getHand()->get(i);
+            currentScore = game->getBoard()->findBestLocation(currentRow, currentCol, tile);
+            if (currentScore > bestScore) {
+               bestScore = currentScore;
+               bestRow = currentRow;
+               bestCol = currentCol;
+               bestTileIndex = i;
+            }
+         }
+         if (bestScore < 1) {
+            input = "replace " + player->getHand()->get(0)->fullName;
+            makeSelection(input, game, gameRunning);
+         }
+         else {
+            score = bestScore;
+            // PCHECK FOR QWIRKLE
+            if (score >= 12 && score < 24) {
+               std::cout << "QWIRKLE!!!" << std::endl;
+            }
+            // DOUBLE QWIRKLE
+            else if (score >= 24) {
+               std::cout << "DOUBLEQWIRKLE!!!" << std::endl;
+            }
+            player->addScore(score);
+            tile = player->getHand()->get(bestTileIndex);
+            game->placeTileOnBoard(tile, bestRow, bestCol);
+            player->getHand()->remove(bestTileIndex);
+            game->addTileToPlayerHand(game->getCurrentPlayerID());
+         }
+      }
+   }
+
+   else if (input.compare("hint") == 0 && input.size() == 4) {
+      std::cout << "Don't tell anyone, but my AI reckons you should..." << std::endl;
+      Player* player = game->getPlayer(game->getCurrentPlayerID());
+      Tile* tile;
+      int score = 0;
+      // LET PLAYER PLACE TILE ON TURN ONE, DON'T VALIDATE (score = 1) 
+      if (game->getBag()->size() == TURNONEBAGSIZE - (game->getPlayerCount()-2) * HANDSIZE) {
+         std::cout << "Place a tile. Anywhere, really but if you're polite you'd put it in the middle." << std::endl;
+      }
+      else {
+         int currentScore = -1;
+         int bestScore = -1;
+         int bestRow = -1;
+         int bestCol = -1;
+         int currentRow = -1;
+         int currentCol = -1;
+         int bestTileIndex = 0;
+         for (int i = 0; i < player->getHand()->size(); i++) {
+            tile = player->getHand()->get(i);
+            currentScore = game->getBoard()->findBestLocation(currentRow, currentCol, tile);
+            if (currentScore > bestScore) {
+               bestScore = currentScore;
+               bestRow = currentRow;
+               bestCol = currentCol;
+               bestTileIndex = i;
+            }
+         }
+         if (bestScore < 0) {
+            std::cout << "Replace a tile. You've got nothing to play unfortunately." << std::endl;
+         }
+         else {
+            score = bestScore;
+            std::string s("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+            char letterRow = s.at(bestRow);
+            std::cout << "Place " << player->getHand()->get(bestTileIndex)->fullName << " over at " << letterRow << bestCol << " for ";
+            // PCHECK FOR QWIRKLE
+            if (score >= 12) {
+               std::cout << "a whopping ";
+            }
+            std::cout << score << " points" << std::endl;
+            std::cout << std::endl;
+         }
+      if (game->getPlayerCount() != 0) {
+         game->getPlayer(game->getCurrentPlayerID())->setRepeatTurn(true);
+      }
+      }
    }
 
    // INVALID INPUT

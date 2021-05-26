@@ -32,7 +32,7 @@ public:
     void setBoard(std::string boardAsString);
     int getNumOfTilesOnBoard();
     bool placeableLocation(int row, int col);
-    void findBestLocation(int &row, int &col, Tile *newTile);
+    int findBestLocation(int &bestRow, int &bestCol, Tile *newTile);
 
 private:
     std::vector<std::vector<Tile *> > state;

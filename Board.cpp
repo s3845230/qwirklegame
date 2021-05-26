@@ -271,7 +271,7 @@ bool Board::placeableLocation(int row, int col) {
         westEmpty = true;
     }
     else {
-        if (this->state[row-1][col-1] == nullptr) {
+        if (this->state[row][col-1] == nullptr) {
             westEmpty = true;
         }
     }
@@ -298,11 +298,20 @@ int Board::getNumOfTilesOnBoard() {
     return returnValue;    
 }
 
-void Board::findBestLocation(int &row, int &col, Tile *newTile) {
-    for (int i = 0; i < BOARD_DIM; i++)
-    {
-        for (int j = 0; j < BOARD_DIM; j++)
-        {
+int Board::findBestLocation(int &bestRow, int &bestCol, Tile *newTile) {
+    int bestScore = 0;
+    int currentScore = 0;
+    bestRow = -1;
+    bestCol = -1;
+    for (int row = 0; row < BOARD_DIM; row++) {
+        for (int col = 0; col < BOARD_DIM; col++) {
+            currentScore = scoreValidate(row, col, newTile);
+            if (currentScore > bestScore) {
+                bestScore = currentScore;
+                bestRow = row;
+                bestCol = col;
+            }
         }
     }
+    return bestScore;
 }

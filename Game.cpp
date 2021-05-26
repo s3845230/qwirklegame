@@ -27,12 +27,14 @@ Game::~Game()
 void Game::addPlayer(std::string name)
 {
     this->playerCount++;
-    this->players[this->playerCount - 1] = new Player(name);
+    //this->players[this->playerCount - 1] = new Player(name);
+    this->players.push_back(new Player(name));
 }
 
 Player *Game::getPlayer(unsigned int playernum)
 {
-    return this->players[playernum];
+    //return this->players[playernum];
+    return this->players.at(playernum);
 }
 
 TileBag *Game::getBag()
@@ -103,26 +105,28 @@ void Game::loadGameState(std::string fileArray[])
 {
     this->board = new Board();
 
-    // Add player 1 content
-    this->addPlayer(fileArray[0]);
-    this->getPlayer(0)->setScore(stoi(fileArray[1]));
-    this->getPlayer(0)->setHand(fileArray[2]);
-    // Add player 2 content
-    this->addPlayer(fileArray[3]);
-    this->getPlayer(1)->setScore(stoi(fileArray[4]));
-    this->getPlayer(1)->setHand(fileArray[5]);
+    int i = 0;
+    while (isalpha(fileArray[i][0])){
+        if (fileArray[i][fileArray[i].size() - 1] == '\r') {
+            fileArray[i].erase(fileArray[i].size() - 1);
+        }
+        this->addPlayer(fileArray[i]);
+        this->getPlayer(i/3)->setScore(stoi(fileArray[i+1]));
+        this->getPlayer(i/3)->setHand(fileArray[i+2]);
+        i += 3;
+    }
     // Set BOARD_DIM
     // this->getBoard()->showBoardDimension(fileArray[6]);
     // Set Board
-    this->getBoard()->setBoard(fileArray[7]);
+    this->getBoard()->setBoard(fileArray[i+1]);
     // Set bag
-    this->setBag(fileArray[8]);
+    this->setBag(fileArray[i+2]);
     // Set current player
-    for (int i = 0; i < this->getPlayerCount(); i++)
+    for (int j = 0; j < this->getPlayerCount(); j++)
     {
-        if (this->getPlayer(i)->getName().compare(fileArray[9]) == 0)
+        if (this->getPlayer(j)->getName().compare(fileArray[i+3]) == 0)
         {
-            this->setCurrentPlayerID(i);
+            this->setCurrentPlayerID(j);
         }
     }
 }
@@ -158,9 +162,8 @@ bool Game::isBeingPlayed()
 
 void Game::showGameState()
 {
-    std::cout << this->getPlayer(this->getCurrentPlayerID())->getName() << ", it's your turn" << std::endl;
-    for (int i = 0; i < this->getPlayerCount(); i++)
-    {
+    std::cout << this->getPlayer(this->getCurrentPlayerID())->getName() << ", it's your turn" <<std::endl;
+    for (int i = 0; i < this->getPlayerCount(); i++) {
         std::cout << "Score for " << this->getPlayer(i)->getName() << ": " << this->getPlayer(i)->getScore() << std::endl;
     }
 

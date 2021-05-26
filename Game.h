@@ -68,7 +68,8 @@ public:
     void endGame(bool &gameRunning);
 
 private:
-    Player *players[MAX_NUM_OF_PLAYERS];
+    //Player *players[MAX_NUM_OF_PLAYERS];
+    std::vector<Player*> players;
     TileBag *bag;
     Board *board;
 
