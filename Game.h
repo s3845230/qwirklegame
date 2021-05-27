@@ -39,6 +39,8 @@ public:
 
     // GAME STATUS
     bool isBeingPlayed();
+    bool isShowingAiTurns();
+    void toggleShowingAiTurns();
     void showGameState();
     void continueGamePlay(bool &gameRunning);
 
@@ -77,7 +79,7 @@ private:
     int playerCount;
 
     bool beingPlayed;
-
+    bool showAiTurns;
 };
 
 #endif // ASSIGN2_GAME_H

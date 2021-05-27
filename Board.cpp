@@ -237,20 +237,24 @@ int Board::scoreValidate(int row, int col, Tile *newTile) {
     return score;
 }
 
+// CHECK WHETHER LOCATION IS TILE-ADJACENT
 bool Board::placeableLocation(int row, int col) {
     bool northEmpty = false;
     bool eastEmpty = false;
     bool southEmpty = false;
     bool westEmpty = false;
     
+    // BORDER CHECK
     if (row == 0) {
         northEmpty = true;
     }
     else {
+        // CHECK IF LOCATION IS EMPTY
         if (this->state[row-1][col] == nullptr) {
             northEmpty = true;
         }
     }
+    // REST ARE THE SAME AS ABOVE FOR OTHER DIRECTIONS
     if (row == static_cast<int>(state.size())-1) {
         southEmpty = true;
     }
@@ -277,6 +281,7 @@ bool Board::placeableLocation(int row, int col) {
     }
     if (northEmpty && westEmpty && eastEmpty && southEmpty) {
         return false;
+        // ONLY RETURN FALSE IF ALL ADJACENT TILES ARE EMPTY OR BORDERS
     }
     else {
         return true;
@@ -303,10 +308,14 @@ int Board::findBestLocation(int &bestRow, int &bestCol, Tile *newTile) {
     int currentScore = 0;
     bestRow = -1;
     bestCol = -1;
+    // ITERATE THROUGH ALL ROWS
     for (int row = 0; row < BOARD_DIM; row++) {
+        // ITERATE THROUGH ALL COLUMNS
         for (int col = 0; col < BOARD_DIM; col++) {
+            // CHECK SCORE AT CURRENT LOCATION WITH GIVEN TILE
             currentScore = scoreValidate(row, col, newTile);
             if (currentScore > bestScore) {
+                // UPDATE IF BETTER
                 bestScore = currentScore;
                 bestRow = row;
                 bestCol = col;

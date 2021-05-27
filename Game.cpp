@@ -12,6 +12,7 @@ Game::Game()
     this->setBeingPlayed(false);
     this->currentPlayerID = 0;
     this->playerCount = 0;
+    this->showAiTurns = false;
 }
 
 Game::~Game()
@@ -87,6 +88,9 @@ void Game::loadGame(std::string filename)
         {
             std::getline(file, line);
             fileArray[i] = line;
+            if (fileArray[i][fileArray[i].size() - 1] == '\r') {
+                fileArray[i].erase(fileArray[i].size() - 1);
+            }
         }
 
         this->loadGameState(fileArray);
@@ -107,9 +111,6 @@ void Game::loadGameState(std::string fileArray[])
 
     int i = 0;
     while (isalpha(fileArray[i][0])){
-        if (fileArray[i][fileArray[i].size() - 1] == '\r') {
-            fileArray[i].erase(fileArray[i].size() - 1);
-        }
         this->addPlayer(fileArray[i]);
         this->getPlayer(i/3)->setScore(stoi(fileArray[i+1]));
         this->getPlayer(i/3)->setHand(fileArray[i+2]);
@@ -158,6 +159,21 @@ void Game::setBeingPlayed(bool playState)
 bool Game::isBeingPlayed()
 {
     return this->beingPlayed;
+}
+
+bool Game::isShowingAiTurns()
+{
+    return this->showAiTurns;
+}
+
+void Game::toggleShowingAiTurns()
+{
+    if (this->showAiTurns) {
+        this->showAiTurns = false;
+    }
+    else {
+        this->showAiTurns = true;
+    }
 }
 
 void Game::showGameState()
